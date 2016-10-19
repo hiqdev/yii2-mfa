@@ -1,0 +1,20 @@
+package:
+    type:           yii2-extension
+    name:           yii2-totp
+    title:          Yii2 module providing TOTP two factor autentication
+    headline:       Yii2 TOTP
+    keywords:       yii2, totp, two factor authentication, RFC6238
+    namespace:      hiqdev\yii2\totp
+    description:    |
+        [TOTP](https://en.wikipedia.org/wiki/Time-based_One-time_Password_Algorithm)
+        is Time-based_One-time Password Algorithm used for two factor authentication.
+
+        This package provides:
+
+        - module
+        - controller
+        - ???
+
+        Based on:
+
+        - [robthree/twofactorauth](https://github.com/robthree/twofactorauth)
