@@ -1,7 +1,7 @@
 {
     "name": "hiqdev/yii2-totp",
     "type": "yii2-extension",
-    "description": "Yii2 module providing TOTP two factor autentication",
+    "description": "Yii2 module providing TOTP two factor authentication",
     "keywords": [
         "yii2",
         "totp",

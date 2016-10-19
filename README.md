@@ -1,7 +1,7 @@
 Yii2 TOTP
 =========
 
-**Yii2 module providing TOTP two factor autentication**
+**Yii2 module providing TOTP two factor authentication**
 
 [![Latest Stable Version](https://poser.pugx.org/hiqdev/yii2-totp/v/stable)](https://packagist.org/packages/hiqdev/yii2-totp)
 [![Total Downloads](https://poser.pugx.org/hiqdev/yii2-totp/downloads)](https://packagist.org/packages/hiqdev/yii2-totp)

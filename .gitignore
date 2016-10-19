@@ -26,4 +26,8 @@ composer.lock
 coverage.clover
 
 # Binaries
+chkipper.phar
 composer.phar
+php-cs-fixer.phar
+phpunit-skelgen.phar
+phpunit.phar

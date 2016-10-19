@@ -1,7 +1,7 @@
 package:
     type:           yii2-extension
     name:           yii2-totp
-    title:          Yii2 module providing TOTP two factor autentication
+    title:          Yii2 module providing TOTP two factor authentication
     headline:       Yii2 TOTP
     keywords:       yii2, totp, two factor authentication, RFC6238
     namespace:      hiqdev\yii2\totp
