@@ -22,9 +22,13 @@ class Module extends \yii\base\Module
 
     public $tmpSecretTimeout = 3600;
 
+    public $paramPrefix = 'TOTP-';
+
     protected $_worker;
 
     protected $_secret;
+
+    protected $_isVerified;
 
     public function getWorker()
     {
@@ -47,17 +51,42 @@ class Module extends \yii\base\Module
     public function getSecret()
     {
         if ($this->_secret === null) {
-            $expires = Yii::$app->session->get('tmp-totp-expires') ?: 0;
+            $expires = $this->sessionGet('tmp-expires') ?: 0;
             if (time() < $expires) {
-                $this->_secret = Yii::$app->session->get('tmp-totp-secret');
+                $this->_secret = $this->sessionGet('tmp-secret');
             }
         }
         if ($this->_secret === null) {
             $this->_secret = $this->createSecret();
-            Yii::$app->session->set('tmp-totp-secret', $this->_secret);
-            Yii::$app->session->set('tmp-totp-expires', time() + $this->tmpSecretTimeout);
+            $this->sessionSet('tmp-secret', $this->_secret);
+            $this->sessionSet('tmp-expires', time() + $this->tmpSecretTimeout);
         }
 
         return $this->_secret;
+    }
+
+    public function sessionSet($name, $value)
+    {
+        Yii::$app->session->set($this->paramPrefix . $name, $value);
+    }
+
+    public function sessionGet($name)
+    {
+        return Yii::$app->session->get($this->paramPrefix . $name);
+    }
+
+    public function getIsVerified()
+    {
+        if ($this->_isVerified === null) {
+            $this->_isVerified = $this->sessionGet('is-verified');
+        }
+
+        return $this->_isVerified;
+    }
+
+    public function setIsVerified($value)
+    {
+        $this->_isVerified = $value;
+        $this->sessionSet('is-verified', $value);
     }
 }

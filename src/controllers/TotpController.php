@@ -49,13 +49,26 @@ class TotpController extends \yii\web\Controller
     {
     }
 
-    public function actionInput()
-    {
-        return $this->render('input');
-    }
-
     public function actionCheck()
     {
-        return 'ZZZ: ' . $this->module->getCode('EYUMUYTHV3UOSOWC');
+        $user = Yii::$app->user->getHalfUser();
+        $model = new InputForm();
+
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            if ($this->module->verifyCode($user->totp_secret, $model->code)) {
+                $this->module->setIsVerified(true);
+                Yii::$app->user->login($user);
+
+                return $this->goBack();
+            } else {
+                $model->addError('code', Yii::t('totp', 'Wrong verification code. Please verify your secret and try again.'));
+            }
+        }
+
+        return $this->render('check', [
+            'model' => $model,
+            'issuer' => $this->module->issuer,
+            'username' => $user->username,
+        ]);
     }
 }

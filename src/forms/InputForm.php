@@ -17,7 +17,7 @@ class InputForm extends \yii\base\Model
     public function rules()
     {
         return [
-            ['code', 'integer', 'min' => 100000, 'max' => 999999],
+            ['code', 'integer', 'max' => 999999],
             ['code', 'required'],
         ];
     }
@@ -28,7 +28,7 @@ class InputForm extends \yii\base\Model
     public function attributeLabels()
     {
         return [
-            'code' => Yii::t('totp', 'Verification Code'),
+            'code' => Yii::t('totp', 'Authentication code'),
         ];
     }
 
