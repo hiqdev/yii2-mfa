@@ -9,9 +9,9 @@
  * @copyright Copyright (c) 2014-2016, HiQDev (http://hiqdev.com/)
  */
 
-namespace hiam\controllers;
+namespace hiqdev\yii2\totp\controllers;
 
-use hiam\forms\InputTotpForm;
+use hiqdev\yii2\totp\forms\InputForm;
 use Yii;
 
 /**
@@ -19,16 +19,11 @@ use Yii;
  */
 class TotpController extends \yii\web\Controller
 {
-    public function getTotp()
-    {
-        return Yii::$app->totp;
-    }
-
     public function actionSetup()
     {
-        $secret = $this->totp->createSecret();
+        $secret = $this->module->createSecret();
         $label = Yii::$app->user->identity->username;
-        $qrcode = $this->totp->getQRCodeImageAsDataUri($label, $secret);
+        $qrcode = $this->module->getQRCodeImageAsDataUri($label, $secret);
 
         return $this->render('setup', compact('secret', 'qrcode'));
     }
@@ -40,6 +35,6 @@ class TotpController extends \yii\web\Controller
 
     public function actionCheck()
     {
-        return 'ZZZ: ' . $this->totp->getCode('EYUMUYTHV3UOSOWC');
+        return 'ZZZ: ' . $this->module->getCode('EYUMUYTHV3UOSOWC');
     }
 }
