@@ -2,6 +2,8 @@
 
 namespace hiqdev\yii2\totp;
 
+use Yii;
+
 class Module extends \yii\base\Module
 {
     public $workerClass;
@@ -18,7 +20,11 @@ class Module extends \yii\base\Module
 
     public $rngProvider;
 
+    public $tmpSecretTimeout = 3600;
+
     protected $_worker;
+
+    protected $_secret;
 
     public function getWorker()
     {
@@ -36,5 +42,22 @@ class Module extends \yii\base\Module
     public function __call($name, $args)
     {
         return call_user_func_array([$this->getWorker(), $name], $args);
+    }
+
+    public function getSecret()
+    {
+        if ($this->_secret === null) {
+            $expires = Yii::$app->session->get('tmp-totp-expires') ?: 0;
+            if (time() < $expires) {
+                $this->_secret = Yii::$app->session->get('tmp-totp-secret');
+            }
+        }
+        if ($this->_secret === null) {
+            $this->_secret = $this->createSecret();
+            Yii::$app->session->set('tmp-totp-secret', $this->_secret);
+            Yii::$app->session->set('tmp-totp-expires', time() + $this->tmpSecretTimeout);
+        }
+
+        return $this->_secret;
     }
 }

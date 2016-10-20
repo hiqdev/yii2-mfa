@@ -19,13 +19,34 @@ use Yii;
  */
 class TotpController extends \yii\web\Controller
 {
-    public function actionSetup()
+    public function actionEnable()
     {
-        $secret = $this->module->createSecret();
-        $label = Yii::$app->user->identity->username;
-        $qrcode = $this->module->getQRCodeImageAsDataUri($label, $secret);
+        $user = Yii::$app->user->identity;
+        $model = new InputForm();
+        $secret = $this->module->getSecret();
 
-        return $this->render('setup', compact('secret', 'qrcode'));
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            if ($this->module->verifyCode($secret, $model->code)) {
+                $user->totp_secret = $secret;
+                if ($user->save() && Yii::$app->user->login($user)) {
+                    Yii::$app->session->setFlash('success', Yii::t('totp', 'Two-factor authentication successfully enabled.'));
+                    return $this->goBack();
+                } else {
+                    Yii::$app->session->setFlash('error', Yii::t('totp', 'Sorry, we have failed to enable two-factor authentication.'));
+                    return $this->goHome();
+                }
+            } else {
+                $model->addError('code', Yii::t('totp', 'Wrong verification code. Please verify your secret and try again.'));
+            }
+        }
+
+        $qrcode = $this->module->getQRCodeImageAsDataUri($user->username, $secret);
+
+        return $this->render('enable', compact('model', 'secret', 'qrcode'));
+    }
+
+    public function actionDisable()
+    {
     }
 
     public function actionInput()
