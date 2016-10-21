@@ -43,6 +43,9 @@
             "homepage": "http://hiqdev.com/"
         }
     ],
+    "require": {
+        "robthree/twofactorauth": "^1.5.1"
+    },
     "require-dev": {
         "hiqdev/hidev-php": "<2.0 || dev-master",
         "hiqdev/hidev-hiqdev": "<2.0 || dev-master"
