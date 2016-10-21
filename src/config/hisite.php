@@ -10,12 +10,15 @@ return [
                 ],
             ],
         ],
+        'user' => [
+            'on beforeLogin' => [\hiqdev\yii2\totp\Module::class, 'onBeforeLogin'],
+        ],
     ],
     'modules' => [
         'totp' => [
             'class' => \hiqdev\yii2\totp\Module::class,
-            'workerClass' => RobThree\Auth\TwoFactorAuth::class,
-            'issuer' => !empty($params['organizationName']) ? $params['organizationName'] : 'Yii2 TOTP',
+            'workerClass' => \RobThree\Auth\TwoFactorAuth::class,
+            'issuer' => !empty($params['organizationName']) ? $params['organizationName'] : 'Yii2 MFA',
         ],
     ],
 ];
