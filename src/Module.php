@@ -3,6 +3,7 @@
 namespace hiqdev\yii2\totp;
 
 use Yii;
+use yii\base\Event;
 
 class Module extends \yii\base\Module
 {
@@ -88,5 +89,11 @@ class Module extends \yii\base\Module
     {
         $this->_isVerified = $value;
         $this->sessionSet('is-verified', $value);
+    }
+
+    public static function onBeforeLogin(Event $event)
+    {
+        //var_dump($event);
+        //die();
     }
 }
