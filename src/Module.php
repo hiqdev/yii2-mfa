@@ -14,6 +14,7 @@ namespace hiqdev\yii2\mfa;
 use hiqdev\yii2\mfa\base\Totp;
 use Yii;
 use yii\base\Event;
+use yii\di\Instance;
 
 /**
  * Multi-factor authentication module.

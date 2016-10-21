@@ -59,10 +59,10 @@ class TotpController extends \yii\web\Controller
         }
 
         $model = new InputForm();
-        $secret = $this->module->getSecret();
+        $secret = $this->module->getTotp()->getSecret();
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            if ($this->module->verifyCode($secret, $model->code)) {
+            if ($this->module->getTotp()->verifyCode($secret, $model->code)) {
                 $user->totp_secret = $secret;
                 if ($user->save() && Yii::$app->user->login($user)) {
                     Yii::$app->session->setFlash('success', Yii::t('mfa', 'Two-factor authentication successfully enabled.'));
@@ -78,7 +78,7 @@ class TotpController extends \yii\web\Controller
             }
         }
 
-        $qrcode = $this->module->getQRCodeImageAsDataUri($user->username, $secret);
+        $qrcode = $this->module->getTotp()->getQRCodeImageAsDataUri($user->username, $secret);
 
         return $this->render('enable', compact('model', 'secret', 'qrcode'));
     }
@@ -100,8 +100,8 @@ class TotpController extends \yii\web\Controller
         $model = new InputForm();
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            if ($this->module->verifyCode($user->totp_secret, $model->code)) {
-                $this->module->setIsVerified(true);
+            if ($this->module->getTotp()->verifyCode($user->totp_secret, $model->code)) {
+                $this->module->getTotp()->setIsVerified(true);
                 Yii::$app->user->login($user);
 
                 return $this->goBack();
@@ -112,7 +112,7 @@ class TotpController extends \yii\web\Controller
 
         return $this->render('check', [
             'model' => $model,
-            'issuer' => $this->module->issuer,
+            'issuer' => $this->module->getTotp()->issuer,
             'username' => $user->username,
         ]);
     }
