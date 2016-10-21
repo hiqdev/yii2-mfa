@@ -2,68 +2,34 @@
 
 namespace hiqdev\yii2\mfa;
 
+use hiqdev\yii2\mfa\base\Totp;
 use Yii;
 use yii\base\Event;
 
+/**
+ * Multi-factor authentication module.
+ *
+ * @author Andrii Vasyliev <sol@hiqdev.com>
+ */
 class Module extends \yii\base\Module
 {
-    public $workerClass;
+    public $paramPrefix = 'MFA-';
 
-    public $issuer;
+    protected $_totp;
 
-    public $digits = 6;
-
-    public $period = 30;
-
-    public $algorithm = 'sha1';
-
-    public $qrcodeProvider;
-
-    public $rngProvider;
-
-    public $tmpSecretTimeout = 3600;
-
-    public $paramPrefix = 'TOTP-';
-
-    protected $_worker;
-
-    protected $_secret;
-
-    protected $_isVerified;
-
-    public function getWorker()
+    public function setTotp($value)
     {
-        if ($this->_worker === null) {
-            $class = $this->workerClass;
-            $this->_worker = new $class(
-                $this->issuer, $this->digits, $this->period, $this->algorithm,
-                $this->qrcodeProvider, $this->rngProvider
-            );
-        }
-
-        return $this->_worker;
+        $this->_totp = $value;
     }
 
-    public function __call($name, $args)
+    public function getTotp()
     {
-        return call_user_func_array([$this->getWorker(), $name], $args);
-    }
-
-    public function getSecret()
-    {
-        if ($this->_secret === null) {
-            $expires = $this->sessionGet('tmp-expires') ?: 0;
-            if (time() < $expires) {
-                $this->_secret = $this->sessionGet('tmp-secret');
-            }
-        }
-        if ($this->_secret === null) {
-            $this->_secret = $this->createSecret();
-            $this->sessionSet('tmp-secret', $this->_secret);
-            $this->sessionSet('tmp-expires', time() + $this->tmpSecretTimeout);
+        if (!is_object($this->_totp)) {
+            $this->_totp = Instance::ensure($this->_totp, Totp::class);
+            $this->_totp->module = $this;
         }
 
-        return $this->_secret;
+        return $this->_totp;
     }
 
     public function sessionSet($name, $value)
@@ -74,21 +40,6 @@ class Module extends \yii\base\Module
     public function sessionGet($name)
     {
         return Yii::$app->session->get($this->paramPrefix . $name);
-    }
-
-    public function getIsVerified()
-    {
-        if ($this->_isVerified === null) {
-            $this->_isVerified = $this->sessionGet('is-verified');
-        }
-
-        return $this->_isVerified;
-    }
-
-    public function setIsVerified($value)
-    {
-        $this->_isVerified = $value;
-        $this->sessionSet('is-verified', $value);
     }
 
     public static function onBeforeLogin(Event $event)

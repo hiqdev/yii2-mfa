@@ -18,7 +18,6 @@ return [
         'mfa' => [
             'class' => \hiqdev\yii2\mfa\Module::class,
             'totp' => [
-                'class' => \hiqdev\yii2\mfa\base\Totp::class,
                 'workerClass' => \RobThree\Auth\TwoFactorAuth::class,
                 'issuer' => !empty($params['organizationName']) ? $params['organizationName'] : 'Yii2 MFA',
             ],
