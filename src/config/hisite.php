@@ -4,21 +4,24 @@ return [
     'components' => [
         'i18n' => [
             'translations' => [
-                'totp' => [
+                'mfa' => [
                     'class' => \yii\i18n\PhpMessageSource::class,
-                    'basePath' => '@hiqdev/yii2/totp/messages',
+                    'basePath' => '@hiqdev/yii2/mfa/messages',
                 ],
             ],
         ],
         'user' => [
-            'on beforeLogin' => [\hiqdev\yii2\totp\Module::class, 'onBeforeLogin'],
+            'on beforeLogin' => [\hiqdev\yii2\mfa\Module::class, 'onBeforeLogin'],
         ],
     ],
     'modules' => [
-        'totp' => [
-            'class' => \hiqdev\yii2\totp\Module::class,
-            'workerClass' => \RobThree\Auth\TwoFactorAuth::class,
-            'issuer' => !empty($params['organizationName']) ? $params['organizationName'] : 'Yii2 MFA',
+        'mfa' => [
+            'class' => \hiqdev\yii2\mfa\Module::class,
+            'totp' => [
+                'class' => \hiqdev\yii2\mfa\base\Totp::class,
+                'workerClass' => \RobThree\Auth\TwoFactorAuth::class,
+                'issuer' => !empty($params['organizationName']) ? $params['organizationName'] : 'Yii2 MFA',
+            ],
         ],
     ],
 ];

@@ -4,7 +4,7 @@ use yii\helpers\Html;
 
 /** @var yii\web\View $this */
 
-$this->title = Yii::t('totp', 'Enable two-factor authentication');
+$this->title = Yii::t('mfa', 'Enable two-factor authentication');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 

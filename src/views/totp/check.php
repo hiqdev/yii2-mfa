@@ -4,7 +4,7 @@ use yii\helpers\Html;
 
 /** @var yii\web\View $this */
 
-$this->title = Yii::t('totp', 'Two-factor authentication');
+$this->title = Yii::t('mfa', 'Two-factor authentication');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -13,7 +13,7 @@ $this->params['breadcrumbs'][] = $this->title;
     'model' => $model,
     'texts' => [
         'header'  => '',
-        'button'  => Yii::t('totp', 'Verify'),
+        'button'  => Yii::t('mfa', 'Verify'),
         'message' => $this->render('_check', compact('issuer', 'username')),
     ],
 ]) ?>

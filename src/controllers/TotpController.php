@@ -9,9 +9,9 @@
  * @copyright Copyright (c) 2014-2016, HiQDev (http://hiqdev.com/)
  */
 
-namespace hiqdev\yii2\totp\controllers;
+namespace hiqdev\yii2\mfa\controllers;
 
-use hiqdev\yii2\totp\forms\InputForm;
+use hiqdev\yii2\mfa\forms\InputForm;
 use Yii;
 use yii\filters\AccessControl;
 
@@ -53,7 +53,7 @@ class TotpController extends \yii\web\Controller
     {
         $user = Yii::$app->user->identity;
         if ($user->totp_secret) {
-            Yii::$app->session->setFlash('error', Yii::t('totp', 'Two-factor authentication is already enabled. Disable first.'));
+            Yii::$app->session->setFlash('error', Yii::t('mfa', 'Two-factor authentication is already enabled. Disable first.'));
             return $this->goHome();
         }
 
@@ -64,14 +64,14 @@ class TotpController extends \yii\web\Controller
             if ($this->module->verifyCode($secret, $model->code)) {
                 $user->totp_secret = $secret;
                 if ($user->save() && Yii::$app->user->login($user)) {
-                    Yii::$app->session->setFlash('success', Yii::t('totp', 'Two-factor authentication successfully enabled.'));
+                    Yii::$app->session->setFlash('success', Yii::t('mfa', 'Two-factor authentication successfully enabled.'));
                     return $this->goBack();
                 } else {
-                    Yii::$app->session->setFlash('error', Yii::t('totp', 'Sorry, we have failed to enable two-factor authentication.'));
+                    Yii::$app->session->setFlash('error', Yii::t('mfa', 'Sorry, we have failed to enable two-factor authentication.'));
                     return $this->goHome();
                 }
             } else {
-                $model->addError('code', Yii::t('totp', 'Wrong verification code. Please verify your secret and try again.'));
+                $model->addError('code', Yii::t('mfa', 'Wrong verification code. Please verify your secret and try again.'));
             }
         }
 
@@ -85,7 +85,7 @@ class TotpController extends \yii\web\Controller
         $user = Yii::$app->user->identity;
         $user->totp_secret = '';
         if ($user->save()) {
-            Yii::$app->session->setFlash('success', Yii::t('totp', 'Two-factor authentication successfully disabled.'));
+            Yii::$app->session->setFlash('success', Yii::t('mfa', 'Two-factor authentication successfully disabled.'));
         }
 
         return $this->goBack();
@@ -103,7 +103,7 @@ class TotpController extends \yii\web\Controller
 
                 return $this->goBack();
             } else {
-                $model->addError('code', Yii::t('totp', 'Wrong verification code. Please verify your secret and try again.'));
+                $model->addError('code', Yii::t('mfa', 'Wrong verification code. Please verify your secret and try again.'));
             }
         }
 

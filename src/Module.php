@@ -1,6 +1,6 @@
 <?php
 
-namespace hiqdev\yii2\totp;
+namespace hiqdev\yii2\mfa;
 
 use Yii;
 use yii\base\Event;

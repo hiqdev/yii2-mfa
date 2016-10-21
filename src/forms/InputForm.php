@@ -1,6 +1,6 @@
 <?php
 
-namespace hiqdev\yii2\totp\forms;
+namespace hiqdev\yii2\mfa\forms;
 
 use Yii;
 
@@ -28,7 +28,7 @@ class InputForm extends \yii\base\Model
     public function attributeLabels()
     {
         return [
-            'code' => Yii::t('totp', 'Authentication code'),
+            'code' => Yii::t('mfa', 'Authentication code'),
         ];
     }
 
