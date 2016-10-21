@@ -12,6 +12,7 @@ $this->params['breadcrumbs'][] = $this->title;
     'class' => 'LoginForm',
     'model' => $model,
     'texts' => [
+        'header'  => '',
         'button'  => Yii::t('totp', 'Verify'),
         'message' => $this->render('_check', compact('issuer', 'username')),
     ],

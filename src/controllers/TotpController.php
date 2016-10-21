@@ -13,15 +13,50 @@ namespace hiqdev\yii2\totp\controllers;
 
 use hiqdev\yii2\totp\forms\InputForm;
 use Yii;
+use yii\filters\AccessControl;
 
 /**
  * TOTP controller.
  */
 class TotpController extends \yii\web\Controller
 {
+    public function behaviors()
+    {
+        return array_merge(parent::behaviors(), [
+            'access' => [
+                'class' => AccessControl::class,
+                'denyCallback' => [$this, 'denyCallback'],
+                'rules' => [
+                    // ? - guest
+                    [
+                        'actions' => ['check'],
+                        'roles' => ['?'],
+                        'allow' => true,
+                    ],
+                    // @ - authenticated
+                    [
+                        'actions' => ['enable','disable'],
+                        'roles' => ['@'],
+                        'allow' => true,
+                    ],
+                ],
+            ],
+        ]);
+    }
+
+    public function denyCallback()
+    {
+        return $this->goHome();
+    }
+
     public function actionEnable()
     {
         $user = Yii::$app->user->identity;
+        if ($user->totp_secret) {
+            Yii::$app->session->setFlash('error', Yii::t('totp', 'Two-factor authentication is already enabled. Disable first.'));
+            return $this->goHome();
+        }
+
         $model = new InputForm();
         $secret = $this->module->getSecret();
 
@@ -47,6 +82,13 @@ class TotpController extends \yii\web\Controller
 
     public function actionDisable()
     {
+        $user = Yii::$app->user->identity;
+        $user->totp_secret = '';
+        if ($user->save()) {
+            Yii::$app->session->setFlash('success', Yii::t('totp', 'Two-factor authentication successfully disabled.'));
+        }
+
+        return $this->goBack();
     }
 
     public function actionCheck()
