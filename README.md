@@ -22,7 +22,7 @@ Uses:
 - [robthree/twofactorauth](https://github.com/robthree/twofactorauth) for TOTP
 
 Can be plugged to exising project.
-See how it used in [hiqdev/hiam-core](https://github.com/hiqdev/hiam-core).
+See how it is used in [hiqdev/hiam-core](https://github.com/hiqdev/hiam-core).
 
 ## Installation
 
