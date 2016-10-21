@@ -1,12 +1,12 @@
 <?php
 
 /*
- * Identity and Access Management server providing OAuth2, RBAC and logging
+ * Yii2 module providing multi-factor authentication
  *
- * @link      https://github.com/hiqdev/hiam-core
- * @package   hiam-core
+ * @link      https://github.com/hiqdev/yii2-mfa
+ * @package   yii2-mfa
  * @license   BSD-3-Clause
- * @copyright Copyright (c) 2014-2016, HiQDev (http://hiqdev.com/)
+ * @copyright Copyright (c) 2016, HiQDev (http://hiqdev.com/)
  */
 
 namespace hiqdev\yii2\mfa\controllers;
@@ -35,7 +35,7 @@ class TotpController extends \yii\web\Controller
                     ],
                     // @ - authenticated
                     [
-                        'actions' => ['enable','disable'],
+                        'actions' => ['enable', 'disable'],
                         'roles' => ['@'],
                         'allow' => true,
                     ],
@@ -54,6 +54,7 @@ class TotpController extends \yii\web\Controller
         $user = Yii::$app->user->identity;
         if ($user->totp_secret) {
             Yii::$app->session->setFlash('error', Yii::t('mfa', 'Two-factor authentication is already enabled. Disable first.'));
+
             return $this->goHome();
         }
 
@@ -65,9 +66,11 @@ class TotpController extends \yii\web\Controller
                 $user->totp_secret = $secret;
                 if ($user->save() && Yii::$app->user->login($user)) {
                     Yii::$app->session->setFlash('success', Yii::t('mfa', 'Two-factor authentication successfully enabled.'));
+
                     return $this->goBack();
                 } else {
                     Yii::$app->session->setFlash('error', Yii::t('mfa', 'Sorry, we have failed to enable two-factor authentication.'));
+
                     return $this->goHome();
                 }
             } else {

@@ -1,9 +1,7 @@
 <?php
 
-use yii\helpers\Html;
 
 /** @var yii\web\View $this */
-
 $this->title = Yii::t('mfa', 'Two-factor authentication');
 $this->params['breadcrumbs'][] = $this->title;
 ?>

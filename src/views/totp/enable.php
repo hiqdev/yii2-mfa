@@ -1,9 +1,7 @@
 <?php
 
-use yii\helpers\Html;
 
 /** @var yii\web\View $this */
-
 $this->title = Yii::t('mfa', 'Enable two-factor authentication');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -12,6 +10,6 @@ $this->params['breadcrumbs'][] = $this->title;
     'class' => 'LoginForm',
     'model' => $model,
     'texts' => [
-        'message' => $this->render('_enable', compact('qrcode', 'secret'))
+        'message' => $this->render('_enable', compact('qrcode', 'secret')),
     ],
 ]) ?>
