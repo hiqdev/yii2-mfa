@@ -17,6 +17,7 @@ use yii\filters\AccessControl;
 
 /**
  * TOTP controller.
+ * Time-based One Time Password.
  */
 class TotpController extends \yii\web\Controller
 {

@@ -58,15 +58,15 @@ class Totp extends \yii\base\Object
     public function getSecret()
     {
         if ($this->_secret === null) {
-            $expires = $this->module->sessionGet('tmp-expires') ?: 0;
+            $expires = $this->module->sessionGet('totp-tmp-expires') ?: 0;
             if (time() < $expires) {
-                $this->_secret = $this->module->sessionGet('tmp-secret');
+                $this->_secret = $this->module->sessionGet('totp-tmp-secret');
             }
         }
         if ($this->_secret === null) {
             $this->_secret = $this->createSecret();
-            $this->module->sessionSet('tmp-secret', $this->_secret);
-            $this->module->sessionSet('tmp-expires', time() + $this->tmpSecretTimeout);
+            $this->module->sessionSet('totp-tmp-secret', $this->_secret);
+            $this->module->sessionSet('totp-tmp-expires', time() + $this->tmpSecretTimeout);
         }
 
         return $this->_secret;
@@ -75,7 +75,7 @@ class Totp extends \yii\base\Object
     public function getIsVerified()
     {
         if ($this->_isVerified === null) {
-            $this->_isVerified = $this->module->sessionGet('is-verified');
+            $this->_isVerified = $this->module->sessionGet('totp-verified');
         }
 
         return $this->_isVerified;
@@ -84,6 +84,6 @@ class Totp extends \yii\base\Object
     public function setIsVerified($value)
     {
         $this->_isVerified = $value;
-        $this->module->sessionSet('is-verified', $value);
+        $this->module->sessionSet('totp-verified', $value);
     }
 }

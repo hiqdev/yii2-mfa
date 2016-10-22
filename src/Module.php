@@ -15,6 +15,9 @@ use hiqdev\yii2\mfa\base\Totp;
 use Yii;
 use yii\base\Event;
 use yii\di\Instance;
+use yii\helpers\StringHelper;
+use yii\validators\IpValidator;
+use yii\web\IdentityInterface;
 
 /**
  * Multi-factor authentication module.
@@ -52,9 +55,64 @@ class Module extends \yii\base\Module
         return Yii::$app->session->get($this->paramPrefix . $name);
     }
 
+    public function sessionRemove($name)
+    {
+        return Yii::$app->session->remove($this->paramPrefix . $name);
+    }
+
+    public function setHalfUser($value)
+    {
+        $this->sessionSet('halfUser', $value);
+    }
+
+    public function getHalfUser()
+    {
+        return $this->sessionGet('halfUser');
+    }
+
+    public function removeHalfUser()
+    {
+        $this->sessionRemove('halfUser');
+    }
+
     public static function onBeforeLogin(Event $event)
     {
-        //var_dump($event);
-        //die();
+        $module = Yii::$app->getModule('mfa');
+        $identity = $event->identity;
+        $module->setHalfUser($identity);
+        $module->validateIps($identity);
+        $module->validateTotp($identity);
     }
+
+    protected function validateIps(IdentityInterface $identity)
+    {
+        if (empty($identity->allowed_ips)) {
+            return;
+        }
+        $ips = array_filter(StringHelper::explode($identity->allowed_ips));
+        $validator = new IpValidator([
+            'ipv6' => false,
+            'ranges' => $ips,
+        ]);
+        if ($validator->validate(Yii::$app->request->getUserIP())) {
+            return;
+        }
+
+        Yii::$app->response->redirect('/mfa/allowed-ips/not-allowed-ip');
+        Yii::$app->end();
+    }
+
+    protected function validateTotp(IdentityInterface $identity)
+    {
+        if (empty($identity->totp_secret)) {
+            return;
+        }
+        if ($this->getTotp()->getIsVerified()) {
+            return;
+        }
+
+        Yii::$app->response->redirect('/mfa/totp/check');
+        Yii::$app->end();
+    }
+
 }
