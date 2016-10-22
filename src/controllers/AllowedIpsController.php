@@ -1,0 +1,83 @@
+<?php
+
+/*
+ * Yii2 module providing multi-factor authentication
+ *
+ * @link      https://github.com/hiqdev/yii2-mfa
+ * @package   yii2-mfa
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2016, HiQDev (http://hiqdev.com/)
+ */
+
+namespace hiqdev\yii2\mfa\controllers;
+
+use Yii;
+use yii\filters\AccessControl;
+
+/**
+ * Allowed IPs controller.
+ */
+class AllowedIpsController extends \yii\web\Controller
+{
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::class,
+                'only' => ['not-allowed-ip', 'other'],
+                'denyCallback' => function () {
+                    return $this->goHome();
+                },
+                'rules' => [
+                    // ? - guest
+                    [
+                        'actions' => ['not-allowed-ip'],
+                        'roles' => ['?'],
+                        'allow' => true,
+                    ],
+                    // @ - authenticated
+                    [
+                        'actions' => ['other'],
+                        'roles' => ['@'],
+                        'allow' => true,
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    public function actionNotAllowedIp($token = null)
+    {
+        $ip = Yii::$app->request->getUserIP();
+        $user = $this->module->getHalfUser();
+        if ($user && $token === 'send') {
+            if (Yii::$app->confirmator->mailToken($user, 'add-allowed-ip', ['ip' => $ip])) {
+                Yii::$app->session->setFlash('success', Yii::t('hiam', 'Check your email for further instructions.'));
+            } else {
+                Yii::$app->session->setFlash('error', Yii::t('hiam', 'Sorry, we are unable to add allowed IP for the user.'));
+            }
+
+            return $this->goHome();
+        }
+        if ($user && $token) {
+            $token = Yii::$app->confirmator->findToken($token);
+            if ($token && $token->check([
+                'username' => $user->username,
+                'action' => 'add-allowed-ip',
+                'ip' => $ip,
+            ])) {
+                $user->allowed_ips .= $user->allowed_ips ? ',' . $ip : $ip;
+                if ($user->save() && Yii::$app->user->login($user)) {
+                    Yii::$app->session->setFlash('success', Yii::t('hiam', 'Now you are allowed to login from {ip}.', ['ip' => $ip]));
+
+                    return $this->goBack();
+                }
+            }
+            Yii::$app->session->setFlash('error', Yii::t('hiam', 'Sorry, we are unable to add allowed IP for the user.'));
+
+            return $this->goHome();
+        }
+
+        return $this->render('notAllowedIp');
+    }
+}
