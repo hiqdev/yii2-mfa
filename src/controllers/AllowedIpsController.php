@@ -52,9 +52,9 @@ class AllowedIpsController extends \yii\web\Controller
         $user = $this->module->getHalfUser();
         if ($user && $token === 'send') {
             if (Yii::$app->confirmator->mailToken($user, 'add-allowed-ip', ['ip' => $ip])) {
-                Yii::$app->session->setFlash('success', Yii::t('hiam', 'Check your email for further instructions.'));
+                Yii::$app->session->setFlash('success', Yii::t('mfa', 'Check your email for further instructions.'));
             } else {
-                Yii::$app->session->setFlash('error', Yii::t('hiam', 'Sorry, we are unable to add allowed IP for the user.'));
+                Yii::$app->session->setFlash('error', Yii::t('mfa', 'Sorry, we are unable to add allowed IP for the user.'));
             }
 
             return $this->goHome();
@@ -68,16 +68,16 @@ class AllowedIpsController extends \yii\web\Controller
             ])) {
                 $user->allowed_ips .= $user->allowed_ips ? ',' . $ip : $ip;
                 if ($user->save() && Yii::$app->user->login($user)) {
-                    Yii::$app->session->setFlash('success', Yii::t('hiam', 'Now you are allowed to login from {ip}.', ['ip' => $ip]));
+                    Yii::$app->session->setFlash('success', Yii::t('mfa', 'Now you are allowed to login from {ip}.', ['ip' => $ip]));
 
                     return $this->goBack();
                 }
             }
-            Yii::$app->session->setFlash('error', Yii::t('hiam', 'Sorry, we are unable to add allowed IP for the user.'));
+            Yii::$app->session->setFlash('error', Yii::t('mfa', 'Sorry, we are unable to add allowed IP for the user.'));
 
             return $this->goHome();
         }
 
-        return $this->render('notAllowedIp');
+        return $this->render('notAllowedIp', compact('ip'));
     }
 }
