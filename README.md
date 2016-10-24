@@ -13,7 +13,7 @@ Yii2 MFA
 This package provides:
 
 - [TOTP](https://en.wikipedia.org/wiki/Time-based_One-time_Password_Algorithm) -
-Time-based_One-time Password Algorithm used for two factor authentication.
+Time-based One-time Password Algorithm used for two factor authentication.
 - checking for user allowed IPs
 - generation and checking recovery codes (PLANNED)
 
