@@ -3,7 +3,7 @@ package:
     name:           yii2-mfa
     title:          Yii2 module providing multi-factor authentication
     headline:       Yii2 MFA
-    keywords:       yii2, authentication, multi-factor, two-factor, RFC6238
+    keywords:       yii2, authentication, multi-factor, two-factor, totp, RFC6238
     namespace:      hiqdev\yii2\mfa
     description:    |
         This package provides:
@@ -16,6 +16,8 @@ package:
         Uses:
 
         - [robthree/twofactorauth](https://github.com/robthree/twofactorauth) for TOTP
+        - [hiqdev/php-confirmator](https://github.com/hiqdev/php-confirmator) for confirmation tokens
 
-        Can be plugged to exising project.
+        Can be plugged into any exising Yii2 project.
         See how it is used in [hiqdev/hiam-core](https://github.com/hiqdev/hiam-core).
+

@@ -20,8 +20,9 @@ Time-based_One-time Password Algorithm used for two factor authentication.
 Uses:
 
 - [robthree/twofactorauth](https://github.com/robthree/twofactorauth) for TOTP
+- [hiqdev/php-confirmator](https://github.com/hiqdev/php-confirmator) for confirmation tokens
 
-Can be plugged to exising project.
+Can be plugged into any exising Yii2 project.
 See how it is used in [hiqdev/hiam-core](https://github.com/hiqdev/hiam-core).
 
 ## Installation

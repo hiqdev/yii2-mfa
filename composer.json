@@ -7,6 +7,7 @@
         "authentication",
         "multi-factor",
         "two-factor",
+        "totp",
         "RFC6238"
     ],
     "homepage": "https://github.com/hiqdev/yii2-mfa",
