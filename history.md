@@ -4,6 +4,7 @@ hiqdev/yii2-mfa
 ## [0.0.1] - 2016-10-22
 
 - Added basics: totp and allowed ips checking
+    - [1538933] 2016-10-24 added ru translation [sol@hiqdev.com]
     - [8efb6ab] 2016-10-22 moved validateTotp/Ips from hiam-core [sol@hiqdev.com]
     - [feb2dd9] 2016-10-22 added Allowed IPs functionality [sol@hiqdev.com]
     - [0d8cba5] 2016-10-21 fixes after renaming [sol@hiqdev.com]
@@ -41,3 +42,4 @@ hiqdev/yii2-mfa
 [3040ebc]: https://github.com//commit/3040ebc
 [063e68e]: https://github.com//commit/063e68e
 [155b1d2]: https://github.com//commit/155b1d2
+[1538933]: https://github.com/hiqdev/yii2-mfa/commit/1538933
