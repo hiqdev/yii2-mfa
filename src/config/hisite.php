@@ -22,6 +22,11 @@ return [
         'user' => [
             'on beforeLogin' => [\hiqdev\yii2\mfa\Module::class, 'onBeforeLogin'],
         ],
+        'themeManager' => [
+            'pathMap' => [
+                '$themedViewPaths' => ['@hiqdev/yii2/mfa/views'],
+            ],
+        ],
     ],
     'modules' => [
         'mfa' => [
