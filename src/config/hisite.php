@@ -20,7 +20,7 @@ return [
             ],
         ],
         'user' => [
-            'on beforeLogin' => [\hiqdev\yii2\mfa\Module::class, 'onBeforeLogin'],
+            'as validateMfa' => \hiqdev\yii2\mfa\behaviors\ValidateMfaBehavior::class,
         ],
         'themeManager' => [
             'pathMap' => [

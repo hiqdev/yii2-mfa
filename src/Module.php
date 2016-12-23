@@ -13,7 +13,6 @@ namespace hiqdev\yii2\mfa;
 
 use hiqdev\yii2\mfa\base\Totp;
 use Yii;
-use yii\base\Event;
 use yii\di\Instance;
 use yii\helpers\StringHelper;
 use yii\validators\IpValidator;
@@ -75,16 +74,7 @@ class Module extends \yii\base\Module
         $this->sessionRemove('halfUser');
     }
 
-    public static function onBeforeLogin(Event $event)
-    {
-        $module = Yii::$app->getModule('mfa');
-        $identity = $event->identity;
-        $module->setHalfUser($identity);
-        $module->validateIps($identity);
-        $module->validateTotp($identity);
-    }
-
-    protected function validateIps(IdentityInterface $identity)
+    public function validateIps(IdentityInterface $identity)
     {
         if (empty($identity->allowed_ips)) {
             return;
@@ -102,7 +92,7 @@ class Module extends \yii\base\Module
         Yii::$app->end();
     }
 
-    protected function validateTotp(IdentityInterface $identity)
+    public function validateTotp(IdentityInterface $identity)
     {
         if (empty($identity->totp_secret)) {
             return;
