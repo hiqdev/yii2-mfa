@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  * Yii2 module providing multi-factor authentication
  *
  * @link      https://github.com/hiqdev/yii2-mfa
@@ -104,5 +103,4 @@ class Module extends \yii\base\Module
         Yii::$app->response->redirect('/mfa/totp/check');
         Yii::$app->end();
     }
-
 }

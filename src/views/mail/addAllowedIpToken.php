@@ -6,7 +6,6 @@ use yii\helpers\Html;
 /** @var yii\web\IdentityInterface $user */
 /** @var yii\mail\MessageInterface $message */
 /** @var string $token */
-
 $resetLink = Yii::$app->urlManager->createAbsoluteUrl(['/mfa/allowed-ips/not-allowed-ip', 'token' => (string) $token]);
 
 $message->setSubject(Yii::t('mfa', 'Allow IP {ip} for {org}', ['ip' => $token->get('ip'), 'org' => Yii::$app->params['organizationName']]));
