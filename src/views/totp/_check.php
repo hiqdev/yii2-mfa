@@ -5,7 +5,7 @@
         <p>
             <?= Yii::t('mfa', 'Use your two-factor authentication app to find the authentication code for:') ?>
             <br/>
-            <?= $issuer ?> / <?= $username ?>
+            <b class="text-primary"><?= $issuer ?> (<?= $username ?>)</b>
         </p>
     </div>
 </div>

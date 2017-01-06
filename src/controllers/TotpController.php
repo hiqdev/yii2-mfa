@@ -12,6 +12,7 @@ namespace hiqdev\yii2\mfa\controllers;
 
 use hiqdev\yii2\mfa\forms\InputForm;
 use Yii;
+use yii\helpers\Url;
 use yii\filters\AccessControl;
 
 /**
@@ -35,7 +36,7 @@ class TotpController extends \yii\web\Controller
                     ],
                     // @ - authenticated
                     [
-                        'actions' => ['enable', 'disable'],
+                        'actions' => ['enable', 'disable', 'toggle'],
                         'roles' => ['@'],
                         'allow' => true,
                     ],
@@ -49,13 +50,13 @@ class TotpController extends \yii\web\Controller
         return $this->goHome();
     }
 
-    public function actionEnable()
+    public function actionEnable($back = null)
     {
         $user = Yii::$app->user->identity;
         if ($user->totp_secret) {
             Yii::$app->session->setFlash('error', Yii::t('mfa', 'Two-factor authentication is already enabled. Disable first.'));
 
-            return $this->goHome();
+            return empty($back) ? $this->goHome() : $this->deferredRedirect($back);
         }
 
         $model = new InputForm();
@@ -64,14 +65,15 @@ class TotpController extends \yii\web\Controller
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($this->module->getTotp()->verifyCode($secret, $model->code)) {
                 $user->totp_secret = $secret;
+                $this->module->getTotp()->setIsVerified(true);
                 if ($user->save() && Yii::$app->user->login($user)) {
                     Yii::$app->session->setFlash('success', Yii::t('mfa', 'Two-factor authentication successfully enabled.'));
 
-                    return $this->goBack();
+                    return empty($back) ? $this->goBack() : $this->deferredRedirect($back);
                 } else {
                     Yii::$app->session->setFlash('error', Yii::t('mfa', 'Sorry, we have failed to enable two-factor authentication.'));
 
-                    return $this->goHome();
+                    return empty($back) ? $this->goHome() : $this->deferredRedirect($back);
                 }
             } else {
                 $model->addError('code', Yii::t('mfa', 'Wrong verification code. Please verify your secret and try again.'));
@@ -83,20 +85,33 @@ class TotpController extends \yii\web\Controller
         return $this->render('enable', compact('model', 'secret', 'qrcode'));
     }
 
-    public function actionDisable()
+    public function actionDisable($back = null)
     {
+        $this->module->getTotp()->removeSecret();
         $user = Yii::$app->user->identity;
         $user->totp_secret = '';
         if ($user->save()) {
             Yii::$app->session->setFlash('success', Yii::t('mfa', 'Two-factor authentication successfully disabled.'));
         }
 
-        return $this->goBack();
+        return empty($back) ? $this->goBack() : $this->deferredRedirect($back);
+    }
+
+    public function deferredRedirect($url = null)
+    {
+        return $this->render('redirect', compact('url'));
+    }
+
+    public function actionToggle($back = null)
+    {
+        $user = Yii::$app->user->identity;
+
+        return empty($user->totp_secret) ? $this->actionEnable($back) : $this->actionDisable($back);
     }
 
     public function actionCheck()
     {
-        $user = Yii::$app->user->getHalfUser();
+        $user = $this->module->getHalfUser();
         $model = new InputForm();
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
