@@ -54,6 +54,11 @@ class Totp extends \yii\base\Object
         return call_user_func_array([$this->getWorker(), $name], $args);
     }
 
+    public function removeSecret()
+    {
+        $this->module->sessionRemove('totp-tmp-secret');
+    }
+
     public function getSecret()
     {
         if ($this->_secret === null) {
