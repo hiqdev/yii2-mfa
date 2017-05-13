@@ -1,23 +1,25 @@
 package:
     type:           yii2-extension
     name:           yii2-mfa
-    title:          Yii2 module providing multi-factor authentication
+    title:          Multi-factor authentication for Yii2 projects
     headline:       Yii2 MFA
     keywords:       yii2, authentication, multi-factor, two-factor, totp, RFC6238
-    namespace:      hiqdev\yii2\mfa
     description:    |
         This package provides:
 
-        - [TOTP](https://en.wikipedia.org/wiki/Time-based_One-time_Password_Algorithm) -
-        Time-based One-time Password Algorithm used for two factor authentication.
+        - [TOTP] - Time-based One-time Password Algorithm used for two factor authentication
         - checking for user allowed IPs
         - generation and checking recovery codes (PLANNED)
 
         Uses:
 
-        - [robthree/twofactorauth](https://github.com/robthree/twofactorauth) for TOTP
-        - [hiqdev/php-confirmator](https://github.com/hiqdev/php-confirmator) for confirmation tokens
+        - [robthree/twofactorauth] for TOTP
+        - [hiqdev/php-confirmator] for confirmation tokens
 
         Can be plugged into any exising Yii2 project.
         See how it is used in [hiqdev/hiam-core](https://github.com/hiqdev/hiam-core).
 
+        [TOTP]:                     https://en.wikipedia.org/wiki/Time-based_One-time_Password_Algorithm
+        [robthree/twofactorauth]:   https://github.com/robthree/twofactorauth
+        [hiqdev/php-confirmator]:   https://github.com/hiqdev/php-confirmator
+        [hiqdev/hiam-core]:         https://github.com/hiqdev/hiam-core

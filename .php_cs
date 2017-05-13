@@ -1,12 +1,12 @@
 <?php
 
 $header = <<<EOF
-Yii2 module providing multi-factor authentication
+Multi-factor authentication for Yii2 projects
 
 @link      https://github.com/hiqdev/yii2-mfa
 @package   yii2-mfa
 @license   BSD-3-Clause
-@copyright Copyright (c) 2016, HiQDev (http://hiqdev.com/)
+@copyright Copyright (c) 2016-2017, HiQDev (http://hiqdev.com/)
 EOF;
 
 return PhpCsFixer\Config::create()
@@ -26,10 +26,9 @@ return PhpCsFixer\Config::create()
         ],
         'concat_space'                               =>  ['spacing' => 'one'],
         'array_syntax'                               =>  ['syntax' => 'short'],
-        'empty_return'                               =>  false,
+        'phpdoc_no_alias_tag'                        =>  ['replacements' => ['type' => 'var']],
         'blank_line_before_return'                   =>  false,
         'phpdoc_align'                               =>  false,
-        'phpdoc_params'                              =>  false,
         'phpdoc_scalar'                              =>  false,
         'phpdoc_separation'                          =>  false,
         'phpdoc_to_comment'                          =>  false,

@@ -1,7 +1,6 @@
-Yii2 MFA
-========
+# Yii2 MFA
 
-**Yii2 module providing multi-factor authentication**
+**Multi-factor authentication for Yii2 projects**
 
 [![Latest Stable Version](https://poser.pugx.org/hiqdev/yii2-mfa/v/stable)](https://packagist.org/packages/hiqdev/yii2-mfa)
 [![Total Downloads](https://poser.pugx.org/hiqdev/yii2-mfa/downloads)](https://packagist.org/packages/hiqdev/yii2-mfa)
@@ -12,18 +11,22 @@ Yii2 MFA
 
 This package provides:
 
-- [TOTP](https://en.wikipedia.org/wiki/Time-based_One-time_Password_Algorithm) -
-Time-based One-time Password Algorithm used for two factor authentication.
+- [TOTP] - Time-based One-time Password Algorithm used for two factor authentication
 - checking for user allowed IPs
 - generation and checking recovery codes (PLANNED)
 
 Uses:
 
-- [robthree/twofactorauth](https://github.com/robthree/twofactorauth) for TOTP
-- [hiqdev/php-confirmator](https://github.com/hiqdev/php-confirmator) for confirmation tokens
+- [robthree/twofactorauth] for TOTP
+- [hiqdev/php-confirmator] for confirmation tokens
 
 Can be plugged into any exising Yii2 project.
 See how it is used in [hiqdev/hiam-core](https://github.com/hiqdev/hiam-core).
+
+[TOTP]:                     https://en.wikipedia.org/wiki/Time-based_One-time_Password_Algorithm
+[robthree/twofactorauth]:   https://github.com/robthree/twofactorauth
+[hiqdev/php-confirmator]:   https://github.com/hiqdev/php-confirmator
+[hiqdev/hiam-core]:         https://github.com/hiqdev/hiam-core
 
 ## Installation
 
@@ -48,4 +51,4 @@ to the require section of your composer.json.
 This project is released under the terms of the BSD-3-Clause [license](LICENSE).
 Read more [here](http://choosealicense.com/licenses/bsd-3-clause).
 
-Copyright © 2016, HiQDev (http://hiqdev.com/)
+Copyright © 2016-2017, HiQDev (http://hiqdev.com/)
