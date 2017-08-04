@@ -10,6 +10,8 @@
 
 namespace hiqdev\yii2\mfa\behaviors;
 
+use hiqdev\yii2\mfa\exceptions\AuthenticationException;
+use hiqdev\yii2\mfa\Module;
 use Yii;
 use yii\base\Event;
 use yii\web\User;
@@ -25,10 +27,16 @@ class ValidateMfaBehavior extends \yii\base\Behavior
 
     public function beforeLogin(Event $event)
     {
+        /** @var Module $module */
         $module = Yii::$app->getModule('mfa');
         $identity = $event->identity;
         $module->setHalfUser($identity);
-        $module->validateIps($identity);
-        $module->validateTotp($identity);
+
+        try {
+            $module->validateIps($identity);
+            $module->validateTotp($identity);
+        } catch (AuthenticationException $e) {
+            $e->redirect();
+        }
     }
 }

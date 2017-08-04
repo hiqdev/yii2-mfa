@@ -10,6 +10,8 @@
 
 namespace hiqdev\yii2\mfa\controllers;
 
+use hiqdev\yii2\mfa\exceptions\AuthenticationException;
+use hiqdev\yii2\mfa\filters\ValidateAuthenticationFilter;
 use Yii;
 use yii\filters\AccessControl;
 
@@ -28,18 +30,21 @@ class AllowedIpsController extends \yii\web\Controller
                     return $this->goHome();
                 },
                 'rules' => [
-                    // ? - guest
                     [
                         'actions' => ['not-allowed-ip'],
-                        'roles' => ['?'],
                         'allow' => true,
-                    ],
-                    // @ - authenticated
-                    [
-                        'actions' => ['other'],
-                        'roles' => ['@'],
-                        'allow' => true,
-                    ],
+                        'matchCallback' => function ($action) {
+                            $filter = new ValidateAuthenticationFilter();
+                            try {
+                                $filter->validateAuthentication(Yii::$app->user->identity);
+                            } catch (AuthenticationException $e) {
+                                // Show this page only when user have problems with IP
+                                return true;
+                            }
+
+                            return false;
+                        }
+                    ]
                 ],
             ],
         ];

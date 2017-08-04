@@ -11,6 +11,8 @@
 namespace hiqdev\yii2\mfa;
 
 use hiqdev\yii2\mfa\base\Totp;
+use hiqdev\yii2\mfa\exceptions\IpNotAllowedException;
+use hiqdev\yii2\mfa\exceptions\TotpVerificationFailedException;
 use Yii;
 use yii\di\Instance;
 use yii\helpers\StringHelper;
@@ -87,8 +89,7 @@ class Module extends \yii\base\Module
             return;
         }
 
-        Yii::$app->response->redirect('/mfa/allowed-ips/not-allowed-ip');
-        Yii::$app->end();
+        throw new IpNotAllowedException();
     }
 
     public function validateTotp(IdentityInterface $identity)
@@ -100,7 +101,6 @@ class Module extends \yii\base\Module
             return;
         }
 
-        Yii::$app->response->redirect('/mfa/totp/check');
-        Yii::$app->end();
+        throw new TotpVerificationFailedException();
     }
 }
