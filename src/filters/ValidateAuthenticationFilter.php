@@ -24,11 +24,12 @@ class ValidateAuthenticationFilter extends ActionFilter
 
     public function beforeAction($action)
     {
-        if (Yii::$app->user->isGuest) {
+        $identity = Yii::$app->user->identity;
+
+        if (Yii::$app->user->isGuest || $identity === null) {
             return $this->denyAccess(new NotAuthenticatedException());
         }
 
-        $identity = Yii::$app->user->identity;
         try {
             $this->validateAuthentication($identity);
         } catch (AuthenticationException $e) {

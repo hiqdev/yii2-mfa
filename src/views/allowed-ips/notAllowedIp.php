@@ -14,5 +14,9 @@ $this->title = Yii::t('mfa', 'Not allowed IP');
 </p>
 
 <p align="center">
-    <?= Html::a(Yii::t('mfa', 'Add this IP to the list of allowed IPs'), ['token' => 'send']) ?>
+    <b><?= Html::a(Yii::t('mfa', 'Add this IP to the list of allowed IPs'), ['token' => 'send']) ?></b>
+</p>
+
+<p align="center">
+    <?= Html::a(Yii::t('mfa', 'Or log out and sign in as a different user'), ['/site/logout']) ?>
 </p>

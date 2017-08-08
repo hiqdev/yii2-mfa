@@ -35,8 +35,15 @@ class AllowedIpsController extends \yii\web\Controller
                         'allow' => true,
                         'matchCallback' => function ($action) {
                             $filter = new ValidateAuthenticationFilter();
+
+                            $identity = Yii::$app->user->identity ?: $this->module->getHalfUser();
+
+                            if ($identity === null) {
+                                return false;
+                            }
+
                             try {
-                                $filter->validateAuthentication(Yii::$app->user->identity);
+                                $filter->validateAuthentication($identity);
                             } catch (AuthenticationException $e) {
                                 // Show this page only when user have problems with IP
                                 return true;
