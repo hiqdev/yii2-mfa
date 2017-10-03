@@ -21,12 +21,12 @@ Uses:
 - [hiqdev/php-confirmator] for confirmation tokens
 
 Can be plugged into any exising Yii2 project.
-See how it is used in [hiqdev/hiam-core](https://github.com/hiqdev/hiam-core).
+See how it is used in [hiqdev/hiam].
 
 [TOTP]:                     https://en.wikipedia.org/wiki/Time-based_One-time_Password_Algorithm
 [robthree/twofactorauth]:   https://github.com/robthree/twofactorauth
 [hiqdev/php-confirmator]:   https://github.com/hiqdev/php-confirmator
-[hiqdev/hiam-core]:         https://github.com/hiqdev/hiam-core
+[hiqdev/hiam]:              https://github.com/hiqdev/hiam
 
 ## Installation
 
