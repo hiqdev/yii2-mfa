@@ -50,8 +50,8 @@ class AllowedIpsController extends \yii\web\Controller
                             }
 
                             return false;
-                        }
-                    ]
+                        },
+                    ],
                 ],
             ],
         ];

@@ -34,5 +34,5 @@ return [
     'Wrong verification code. Please verify your secret and try again.' => 'Неправильный проверочный код. Пожалуйста, проверьте ваш секретный код и попробуйте снова.',
     'You are not allowed to login from this IP' => 'Вам не разрешен доступ с этого IP',
     'enter this text code instead' => 'введите этот код',
-    'Or log out and sign in as a different user' => 'Или выйти и зайти другим пользователем'
+    'Or log out and sign in as a different user' => 'Или выйти и зайти другим пользователем',
 ];
