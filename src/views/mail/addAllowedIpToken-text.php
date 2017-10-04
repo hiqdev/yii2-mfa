@@ -1,8 +1,8 @@
 <?php
 
-/* @var $this yii\web\View */
-/* @var $user common\models\User */
-/* @var $resetLink string */
+/** @var yii\web\View $this */
+/** @var common\models\User $user */
+/** @var string $resetLink */
 
 ?>
 Hello <?= $user->username ?>,

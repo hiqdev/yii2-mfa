@@ -10,13 +10,13 @@
 
 return [
     'Add this IP to the list of allowed IPs' => 'Добавить этот IP в список разрешённых',
-    'Allow IP {ip} for {org}' => 'Разрешить IP {ip} для {org}',
+    '[{org}] Allow IP address {ip}' => '[{org}] Разрешить IP адрес {ip}',
     'Authentication code' => 'Проверочный код',
     'Check your email for further instructions.' => 'Проверьте вашу электронную почту для получения дальнейших инструкций.',
     'Enable two-factor authentication' => 'Включить двухфакторную аутентификацию',
     'Enter the six-digit code from your app' => 'Введите шестизначный код из вашего приложения',
     'Follow the link below to allow the IP address {ip}:' => 'Перейдите по ссылке ниже чтобы разрешить IP-адрес {ip}:',
-    'Hello {name}' => 'Здравствуйте {name}',
+    'Hello, {name}!' => 'Здравствуйте, {name}!',
     'If you can\'t use a QR-code' => 'Если вы не можете использовать QR-код',
     'Not allowed IP' => 'Неразрешённый IP',
     'Now you are allowed to login from {ip}.' => 'Теперь Вам разрешён логин с {ip}',
