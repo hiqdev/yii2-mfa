@@ -77,7 +77,7 @@ class AllowedIpsController extends \yii\web\Controller
                 'action' => 'add-allowed-ip',
                 'ip' => $ip,
             ])) {
-                $user->allowed_ips .= $user->allowed_ips ? ',' . $ip : $ip;
+                $user->allowed_ips .= ($user->allowed_ips ? ',' : '') . $ip;
                 if ($user->save() && Yii::$app->user->login($user)) {
                     Yii::$app->session->setFlash('success', Yii::t('mfa', 'Now you are allowed to login from {ip}.', ['ip' => $ip]));
 
