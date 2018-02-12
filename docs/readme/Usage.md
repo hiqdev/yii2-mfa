@@ -1,5 +1,5 @@
 This plugin provides behavior and configuration attaches it
-to user component on beforeLogin` event.
+to user component on `beforeLogin` event.
 And then the behavior validates IPs and TOTP on every login.
 
 To use this plugin you need to provide:
