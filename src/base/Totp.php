@@ -10,7 +10,7 @@
 
 namespace hiqdev\yii2\mfa\base;
 
-class Totp extends \yii\base\Object
+class Totp extends \yii\base\BaseObject
 {
     public $workerClass;
 
