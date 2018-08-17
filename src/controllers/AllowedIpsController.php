@@ -10,6 +10,7 @@
 
 namespace hiqdev\yii2\mfa\controllers;
 
+use hiqdev\php\confirmator\ServiceInterface;
 use hiqdev\yii2\mfa\exceptions\AuthenticationException;
 use hiqdev\yii2\mfa\filters\ValidateAuthenticationFilter;
 use Yii;
@@ -20,6 +21,17 @@ use yii\filters\AccessControl;
  */
 class AllowedIpsController extends \yii\web\Controller
 {
+    /**
+     * @var ServiceInterface
+     */
+    private $confirmator;
+
+    public function __construct($id, $module, ServiceInterface $confirmator, $config = [])
+    {
+        parent::__construct($id, $module, $config);
+        $this->confirmator = $confirmator;
+    }
+
     public function behaviors()
     {
         return [
@@ -62,7 +74,7 @@ class AllowedIpsController extends \yii\web\Controller
         $ip = Yii::$app->request->getUserIP();
         $user = $this->module->getHalfUser();
         if ($user && $token === 'send') {
-            if (Yii::$app->confirmator->mailToken($user, 'add-allowed-ip', ['ip' => $ip])) {
+            if ($this->confirmator->mailToken($user, 'add-allowed-ip', ['ip' => $ip])) {
                 Yii::$app->session->setFlash('success', Yii::t('mfa', 'Check your email for further instructions.'));
             } else {
                 Yii::$app->session->setFlash('error', Yii::t('mfa', 'Sorry, we are unable to add allowed IP for the user.'));
@@ -71,7 +83,7 @@ class AllowedIpsController extends \yii\web\Controller
             return $this->goHome();
         }
         if ($user && $token) {
-            $token = Yii::$app->confirmator->findToken($token);
+            $token = $this->confirmator->findToken($token);
             if ($token && $token->check([
                 'username' => $user->username,
                 'action' => 'add-allowed-ip',
