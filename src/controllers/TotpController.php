@@ -87,14 +87,24 @@ class TotpController extends \yii\web\Controller
 
     public function actionDisable($back = null)
     {
-        $this->module->getTotp()->removeSecret();
         $user = Yii::$app->user->identity;
-        $user->totp_secret = '';
-        if ($user->save()) {
-            Yii::$app->session->setFlash('success', Yii::t('mfa', 'Two-factor authentication successfully disabled.'));
-        }
+        $model = new InputForm();
+        $secret = $this->module->getTotp()->getSecret();
 
-        return empty($back) ? $this->goBack() : $this->deferredRedirect($back);
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            if ($this->module->getTotp()->verifyCode($secret, $model->code)) {
+                $this->module->getTotp()->removeSecret();
+                $user->totp_secret = '';
+                if ($user->save()) {
+                    Yii::$app->session->setFlash('success', Yii::t('mfa', 'Two-factor authentication successfully disabled.'));
+                }
+
+                return empty($back) ? $this->goBack() : $this->deferredRedirect($back);
+            } else {
+                $model->addError('code', Yii::t('mfa', 'Wrong verification code. Please verify your secret and try again.'));
+            }
+        }
+        return $this->render('disable', compact('model'));
     }
 
     public function deferredRedirect($url = null)
