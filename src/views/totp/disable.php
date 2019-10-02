@@ -15,7 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
     'model' => $model,
     'texts' => [
         'header'  => '',
-        'button'  => Yii::t('mfa', 'DISABLE TWO-FACTOR AUTHENTICATION'),
+        'button'  => Yii::t('mfa', 'Disable Two-Factor Authentication'),
         'message' => $this->render('_disable'),
     ],
 ]) ?>
