@@ -89,7 +89,7 @@ class TotpController extends \yii\web\Controller
     {
         $user = Yii::$app->user->identity;
         $model = new InputForm();
-        $secret = $this->module->getTotp()->getSecret();
+        $secret = $user->totp_secret;
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($this->module->getTotp()->verifyCode($secret, $model->code)) {
@@ -123,9 +123,10 @@ class TotpController extends \yii\web\Controller
     {
         $user = $this->module->getHalfUser();
         $model = new InputForm();
+        $secret = $user->totp_secret;
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            if ($this->module->getTotp()->verifyCode($user->totp_secret, $model->code)) {
+            if ($this->module->getTotp()->verifyCode($secret, $model->code)) {
                 $this->module->getTotp()->setIsVerified(true);
                 Yii::$app->user->login($user);
 
