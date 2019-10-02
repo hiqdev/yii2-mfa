@@ -30,7 +30,7 @@ return [
     'Scan this QR-code with your app' => 'Сканируйте этот QR-код вашим приложением',
     'Sorry, we are unable to add allowed IP for the user.' => 'Извините, мы не можем разрешить IP этому пользователю.',
     'Sorry, we have failed to enable two-factor authentication.' => 'Извините, не удалось включить двухфакторную аутентификацию.',
-    'Two-factor authentication' => 'Двухфакторная Аутентификация',
+    'Two-Factor Authentication' => 'Двухфакторная Аутентификация',
     'Two-factor authentication is already enabled. Disable first.' => 'Двухфакторная аутентификация уже включена. Сначала выключите.',
     'Two-factor authentication successfully disabled.' => 'Двухфакторная аутентификация успешно выключена.',
     'Two-factor authentication successfully enabled.' => 'Двухфакторная аутентификация успешно включена.',
