@@ -2,8 +2,11 @@
 
 use hiqdev\thememanager\widgets\LoginForm;
 
-/** @var yii\web\View $this */
-$this->title = Yii::t('mfa', 'Enable two-factor authentication');
+/**
+ * @var yii\web\View $this
+ * @var \hiqdev\yii2\mfa\forms\InputForm $model
+ */
+$this->title = Yii::t('mfa', 'Enable Two-Factor Authentication');
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>

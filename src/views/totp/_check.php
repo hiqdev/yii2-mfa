@@ -1,9 +1,18 @@
+<?php
+
+/**
+ * @var \yii\web\View $this
+ * @var string $issuer
+ * @var string $username
+ */
+
+?>
+
 <h3><?= $this->title ?></h3>
 <div class="row">
-    <div class="col-md-2" align="right"><i class="fa fa-mobile fa-4x"></i></div>
-    <div class="col-md-10">
+    <div class="col-md-12">
         <p>
-            <?= Yii::t('mfa', 'Use your two-factor authentication app to find the authentication code for:') ?>
+            <?= Yii::t('mfa', 'Please enter the six-digit code from your app') ?>
             <br/>
             <b class="text-primary"><?= $issuer ?> (<?= $username ?>)</b>
         </p>
