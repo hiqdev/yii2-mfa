@@ -7,7 +7,7 @@ use hiqdev\yii2\mfa\forms\InputForm;
  * @var yii\web\View $this
  * @var InputForm $model
  */
-$this->title = Yii::t('mfa', 'Two-factor authentication');
+$this->title = Yii::t('mfa', 'Two-Factor Authentication');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
