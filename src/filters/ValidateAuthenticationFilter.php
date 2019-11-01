@@ -35,7 +35,7 @@ class ValidateAuthenticationFilter extends ActionFilter
         $identity = Yii::$app->user->identity;
 
         if (Yii::$app->user->isGuest || $identity === null) {
-            return $this->denyAccess(new NotAuthenticatedException());
+            return true;
         }
 
         try {
