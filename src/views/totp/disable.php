@@ -2,6 +2,7 @@
 
 use hiqdev\thememanager\widgets\LoginForm;
 use hiqdev\yii2\mfa\forms\InputForm;
+use hiqdev\yii2\mfa\widgets\BackTOTPLinkWidget;
 
 /**
  * @var yii\web\View $this
@@ -10,6 +11,8 @@ use hiqdev\yii2\mfa\forms\InputForm;
 $this->title = Yii::t('mfa', 'Two-Factor Authentication');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+
+<?= BackTOTPLinkWidget::widget() ?>
 
 <?= LoginForm::widget([
     'model' => $model,
