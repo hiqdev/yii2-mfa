@@ -11,7 +11,7 @@ use yii\helpers\Html;
  * Class BackTOTPLinkWidget
  * @package hiqdev\yii2\mfa\widgets
  */
-class BackTOTPLinkWidget extends Widget
+class BackLinkWidget extends Widget
 {
     private $options = [
         'id'    => 'back-link',

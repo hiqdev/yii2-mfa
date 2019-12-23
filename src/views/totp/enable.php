@@ -1,7 +1,7 @@
 <?php
 
 use hiqdev\thememanager\widgets\LoginForm;
-use hiqdev\yii2\mfa\widgets\BackTOTPLinkWidget;
+use hiqdev\yii2\mfa\widgets\BackLinkWidget;
 
 /**
  * @var yii\web\View $this
@@ -19,4 +19,4 @@ $this->params['breadcrumbs'][] = $this->title;
     ],
 ]) ?>
 
-<?= BackTOTPLinkWidget::widget() ?>
+<?= BackLinkWidget::widget() ?>
