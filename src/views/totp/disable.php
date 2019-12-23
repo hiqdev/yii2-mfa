@@ -12,8 +12,6 @@ $this->title = Yii::t('mfa', 'Two-Factor Authentication');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
-<?= BackTOTPLinkWidget::widget() ?>
-
 <?= LoginForm::widget([
     'model' => $model,
     'texts' => [
@@ -22,3 +20,5 @@ $this->params['breadcrumbs'][] = $this->title;
         'message' => $this->render('_disable'),
     ],
 ]) ?>
+
+<?= BackTOTPLinkWidget::widget() ?>

@@ -13,6 +13,11 @@ use yii\helpers\Html;
  */
 class BackTOTPLinkWidget extends Widget
 {
+    private $options = [
+        'id'    => 'back-link',
+        'class' => 'text-secondary',
+    ];
+
     /**
      * @inheritDoc
      */
@@ -20,9 +25,9 @@ class BackTOTPLinkWidget extends Widget
     {
         $this->registerJs();
 
-        $backLink = HTML::a(Yii::t('mfa', 'Back'), '#', ['id' => 'back-link']);
+        $backLink = HTML::a(Yii::t('mfa', 'Back'), '#', $this->options);
 
-        return "<div>$backLink</div>";
+        return "<div style='margin-top: 15px;'>$backLink</div>";
     }
 
     private function registerJs()

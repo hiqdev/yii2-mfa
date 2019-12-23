@@ -12,11 +12,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
 ?>
 
-<?= BackTOTPLinkWidget::widget() ?>
-
 <?= LoginForm::widget([
     'model' => $model,
     'texts' => [
         'message' => $this->render('_enable', compact('qrcode', 'secret')),
     ],
 ]) ?>
+
+<?= BackTOTPLinkWidget::widget() ?>
