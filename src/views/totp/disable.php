@@ -2,6 +2,7 @@
 
 use hiqdev\thememanager\widgets\LoginForm;
 use hiqdev\yii2\mfa\forms\InputForm;
+use hiqdev\yii2\mfa\widgets\BackLinkWidget;
 
 /**
  * @var yii\web\View $this
@@ -19,3 +20,5 @@ $this->params['breadcrumbs'][] = $this->title;
         'message' => $this->render('_disable'),
     ],
 ]) ?>
+
+<?= BackLinkWidget::widget() ?>
