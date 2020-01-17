@@ -13,7 +13,6 @@ namespace hiqdev\yii2\mfa\controllers;
 use hiqdev\yii2\mfa\forms\InputForm;
 use Yii;
 use yii\filters\AccessControl;
-use yii\helpers\Url;
 
 /**
  * TOTP controller.
@@ -141,5 +140,18 @@ class TotpController extends \yii\web\Controller
             'issuer' => $this->module->getTotp()->issuer,
             'username' => $user->username,
         ]);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function goBack($defaultUrl = null)
+    {
+        $redirectUrl = Yii::$app->params['totpRedirectBackAction.url'];
+        if (!empty($redirectUrl)) {
+            return $this->redirect($redirectUrl);
+        }
+
+        return parent::goBack($defaultUrl);
     }
 }

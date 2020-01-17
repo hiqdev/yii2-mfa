@@ -9,5 +9,6 @@
  */
 
 return [
+    'totpRedirectBackAction.url' => null,
     'organization.name' => null,
 ];
