@@ -18,6 +18,7 @@ use yii\di\Instance;
 use yii\helpers\StringHelper;
 use yii\validators\IpValidator;
 use yii\web\IdentityInterface;
+use yii\web\User;
 
 /**
  * Multi-factor authentication module.
@@ -27,6 +28,8 @@ use yii\web\IdentityInterface;
 class Module extends \yii\base\Module
 {
     public $paramPrefix = 'MFA-';
+
+    public $userClass = User::class;
 
     protected $_totp;
 
@@ -62,12 +65,15 @@ class Module extends \yii\base\Module
 
     public function setHalfUser($value)
     {
-        $this->sessionSet('halfUser', $value);
+        $attributes = $value->getAttribute('id');
+        $this->sessionSet('halfUser', $attributes);
     }
 
     public function getHalfUser()
     {
-        return $this->sessionGet('halfUser');
+        $id = $this->sessionGet('halfUser');
+        $class = new $this->userClass;
+        return $class::findOne(['id' => $id]);
     }
 
     public function removeHalfUser()
