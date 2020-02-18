@@ -10,6 +10,7 @@
 
 namespace hiqdev\yii2\mfa;
 
+use hiqdev\yii2\mfa\base\MfaIdentityInterface;
 use hiqdev\yii2\mfa\base\Totp;
 use hiqdev\yii2\mfa\exceptions\IpNotAllowedException;
 use hiqdev\yii2\mfa\exceptions\TotpVerificationFailedException;
@@ -75,7 +76,7 @@ class Module extends \yii\base\Module
         $this->sessionRemove('halfUser');
     }
 
-    public function validateIps(IdentityInterface $identity)
+    public function validateIps(MfaIdentityInterface $identity)
     {
         if (empty($identity->allowed_ips)) {
             return;
@@ -92,7 +93,7 @@ class Module extends \yii\base\Module
         throw new IpNotAllowedException();
     }
 
-    public function validateTotp(IdentityInterface $identity)
+    public function validateTotp(MfaIdentityInterface $identity)
     {
         if (empty($identity->totp_secret)) {
             return;

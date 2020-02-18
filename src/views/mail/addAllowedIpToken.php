@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 
 /** @var yii\web\View $this */
-/** @var yii\web\IdentityInterface $user */
+/** @var hiqdev\yii2\mfa\base\MfaIdentityInterface $user */
 /** @var yii\mail\MessageInterface $message */
 /** @var hiqdev\php\confirmator\Token $token */
 $resetLink = Yii::$app->urlManager->createAbsoluteUrl(['/mfa/allowed-ips/not-allowed-ip', 'token' => (string) $token]);

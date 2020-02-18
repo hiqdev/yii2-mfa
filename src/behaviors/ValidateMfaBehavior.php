@@ -10,6 +10,7 @@
 
 namespace hiqdev\yii2\mfa\behaviors;
 
+use hiqdev\yii2\mfa\base\MfaIdentityInterface;
 use hiqdev\yii2\mfa\exceptions\AuthenticationException;
 use hiqdev\yii2\mfa\Module;
 use Yii;
@@ -32,6 +33,8 @@ class ValidateMfaBehavior extends \yii\base\Behavior
     {
         /** @var Module $module */
         $module = Yii::$app->getModule('mfa');
+
+        /** @var MfaIdentityInterface $identity */
         $identity = $event->identity;
         $module->setHalfUser($identity);
 
