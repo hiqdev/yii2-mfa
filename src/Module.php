@@ -60,14 +60,17 @@ class Module extends \yii\base\Module
         return Yii::$app->session->remove($this->paramPrefix . $name);
     }
 
-    public function setHalfUser($value)
+    public function setHalfUser(IdentityInterface $value)
     {
-        $this->sessionSet('halfUser', $value);
+        $this->sessionSet('halfUser', $value->getId());
+        $this->sessionSet('totp-tmp-secret', $value->totp_secret);
     }
 
-    public function getHalfUser()
+    public function getHalfUser(): IdentityInterface
     {
-        return $this->sessionGet('halfUser');
+        $id = $this->sessionGet('halfUser');
+
+        return Yii::$app->user->findIdentity($id);
     }
 
     public function removeHalfUser()
