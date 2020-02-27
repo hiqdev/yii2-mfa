@@ -17,7 +17,7 @@ $message->renderTextBody(basename(__FILE__, '.php') . '-text', compact('user', '
 
 ?>
 <div class="password-reset">
-    <p><?= Yii::t('mfa', 'Hello, {name}!', ['name' => Html::encode($user->name)]) ?></p>
+    <p><?= Yii::t('mfa', 'Hello, {name}!', ['name' => Html::encode($user->getUsername())]) ?></p>
 
     <p><?= Yii::t('mfa', 'Follow the link below to allow the IP address {ip}:', ['ip' => $ip]) ?></p>
 

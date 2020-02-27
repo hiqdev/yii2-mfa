@@ -10,24 +10,42 @@ use yii\web\IdentityInterface;
  * Interface MfaIdentityInterface
  * @package hiqdev\yii2\mfa\base
  *
- * @property mixed $username
- * @property mixed $totp_secret
- * @property mixed $allowed_ips
+ * @property string $username
+ * @property string $totp_secret
+ * @property string $allowed_ips
  */
 interface MfaIdentityInterface extends IdentityInterface
 {
     /**
-     * @return mixed
+     * @return string
      */
-    public function getUsername();
+    public function getUsername(): string;
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getTotpSecret();
+    public function getTotpSecret(): string;
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getAllowedIps();
+    public function getAllowedIps(): string;
+
+    /**
+     * @param string $username
+     * @return $this
+     */
+    public function setUsername(string $username): self;
+
+    /**
+     * @param string $secret
+     * @return $this
+     */
+    public function setTotpSecret(string $secret): self;
+
+    /**
+     * @param string $allowedIp
+     * @return $this
+     */
+    public function addAllowedIp(string $allowedIp): self;
 }

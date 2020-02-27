@@ -61,12 +61,12 @@ class Module extends \yii\base\Module
         return Yii::$app->session->remove($this->paramPrefix . $name);
     }
 
-    public function setHalfUser($value)
+    public function setHalfUser(MfaIdentityInterface $value)
     {
         $this->sessionSet('halfUser', $value);
     }
 
-    public function getHalfUser()
+    public function getHalfUser(): MfaIdentityInterface
     {
         return $this->sessionGet('halfUser');
     }
@@ -78,10 +78,10 @@ class Module extends \yii\base\Module
 
     public function validateIps(MfaIdentityInterface $identity)
     {
-        if (empty($identity->allowed_ips)) {
+        if (empty($identity->getAllowedIps())) {
             return;
         }
-        $ips = array_filter(StringHelper::explode($identity->allowed_ips));
+        $ips = array_filter(StringHelper::explode($identity->getAllowedIps()));
         $validator = new IpValidator([
             'ipv6' => false,
             'ranges' => $ips,
@@ -95,7 +95,7 @@ class Module extends \yii\base\Module
 
     public function validateTotp(MfaIdentityInterface $identity)
     {
-        if (empty($identity->totp_secret)) {
+        if (empty($identity->getTotpSecret())) {
             return;
         }
         if ($this->getTotp()->getIsVerified()) {
