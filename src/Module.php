@@ -81,7 +81,7 @@ class Module extends \yii\base\Module
         if (empty($identity->getAllowedIps())) {
             return;
         }
-        $ips = array_filter(StringHelper::explode($identity->getAllowedIps()));
+        $ips = array_filter($identity->getAllowedIps());
         $validator = new IpValidator([
             'ipv6' => false,
             'ranges' => $ips,

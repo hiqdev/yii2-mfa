@@ -12,7 +12,7 @@ use yii\web\IdentityInterface;
  *
  * @property string $username
  * @property string $totp_secret
- * @property string $allowed_ips
+ * @property string[]|string $allowed_ips
  */
 interface MfaIdentityInterface extends IdentityInterface
 {
@@ -27,9 +27,9 @@ interface MfaIdentityInterface extends IdentityInterface
     public function getTotpSecret(): string;
 
     /**
-     * @return string
+     * @return string[]
      */
-    public function getAllowedIps(): string;
+    public function getAllowedIps(): array;
 
     /**
      * @param string $username
