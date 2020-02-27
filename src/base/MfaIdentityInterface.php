@@ -9,10 +9,6 @@ use yii\web\IdentityInterface;
 /**
  * Interface MfaIdentityInterface
  * @package hiqdev\yii2\mfa\base
- *
- * @property string $username
- * @property string $totp_secret
- * @property string[]|string $allowed_ips
  */
 interface MfaIdentityInterface extends IdentityInterface
 {

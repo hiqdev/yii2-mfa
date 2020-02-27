@@ -63,17 +63,21 @@ class Module extends \yii\base\Module
 
     public function setHalfUser(MfaIdentityInterface $value)
     {
-        $this->sessionSet('halfUser', $value);
+        $this->sessionSet('half-user-id', $value->getId());
+        $this->sessionSet('totp-tmp-secret', $value->getTotpSecret());
     }
 
     public function getHalfUser(): MfaIdentityInterface
     {
-        return $this->sessionGet('halfUser');
+        $id = $this->sessionGet('half-user-id');
+
+        return Yii::$app->user->findIdentity($id);
     }
 
     public function removeHalfUser()
     {
-        $this->sessionRemove('halfUser');
+        $this->sessionRemove('half-user-id');
+        $this->sessionRemove('totp-tmp-secret');
     }
 
     public function validateIps(MfaIdentityInterface $identity)
