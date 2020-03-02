@@ -28,12 +28,6 @@ interface MfaIdentityInterface extends IdentityInterface
     public function getAllowedIps(): array;
 
     /**
-     * @param string $username
-     * @return $this
-     */
-    public function setUsername(string $username): self;
-
-    /**
      * @param string $secret
      * @return $this
      */
