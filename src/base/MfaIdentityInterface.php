@@ -13,6 +13,20 @@ use yii\web\IdentityInterface;
 interface MfaIdentityInterface extends IdentityInterface
 {
     /**
+     * @inheritDoc
+     *
+     * @return MfaIdentityInterface
+     */
+    public static function findIdentity($id);
+
+    /**
+     * @inheritDoc
+     *
+     * @return MfaIdentityInterface
+     */
+    public static function findIdentityByAccessToken($token, $type = null);
+
+    /**
      * @return string
      */
     public function getUsername(): string;

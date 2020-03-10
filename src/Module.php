@@ -70,8 +70,10 @@ class Module extends \yii\base\Module
     public function getHalfUser(): MfaIdentityInterface
     {
         $id = $this->sessionGet('half-user-id');
+        /** @var MfaIdentityInterface $identity */
+        $identity = Yii::$app->user->identityClass;
 
-        return Yii::$app->user->findIdentity($id);
+        return $identity::findIdentity($id);
     }
 
     public function removeHalfUser()
