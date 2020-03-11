@@ -10,6 +10,7 @@
 
 namespace hiqdev\yii2\mfa;
 
+use hiqdev\yii2\mfa\base\MfaIdentityInterface;
 use hiqdev\yii2\mfa\base\Totp;
 use hiqdev\yii2\mfa\exceptions\IpNotAllowedException;
 use hiqdev\yii2\mfa\exceptions\TotpVerificationFailedException;
@@ -60,27 +61,33 @@ class Module extends \yii\base\Module
         return Yii::$app->session->remove($this->paramPrefix . $name);
     }
 
-    public function setHalfUser($value)
+    public function setHalfUser(MfaIdentityInterface $value)
     {
-        $this->sessionSet('halfUser', $value);
+        $this->sessionSet('half-user-id', $value->getId());
+        $this->sessionSet('totp-tmp-secret', $value->getTotpSecret());
     }
 
-    public function getHalfUser()
+    public function getHalfUser(): MfaIdentityInterface
     {
-        return $this->sessionGet('halfUser');
+        $id = $this->sessionGet('half-user-id');
+        /** @var MfaIdentityInterface $identity */
+        $identity = Yii::$app->user->identityClass;
+
+        return $identity::findIdentity($id);
     }
 
     public function removeHalfUser()
     {
-        $this->sessionRemove('halfUser');
+        $this->sessionRemove('half-user-id');
+        $this->sessionRemove('totp-tmp-secret');
     }
 
-    public function validateIps(IdentityInterface $identity)
+    public function validateIps(MfaIdentityInterface $identity)
     {
-        if (empty($identity->allowed_ips)) {
+        if (empty($identity->getAllowedIps())) {
             return;
         }
-        $ips = array_filter(StringHelper::explode($identity->allowed_ips));
+        $ips = array_filter($identity->getAllowedIps());
         $validator = new IpValidator([
             'ipv6' => false,
             'ranges' => $ips,
@@ -92,9 +99,9 @@ class Module extends \yii\base\Module
         throw new IpNotAllowedException();
     }
 
-    public function validateTotp(IdentityInterface $identity)
+    public function validateTotp(MfaIdentityInterface $identity)
     {
-        if (empty($identity->totp_secret)) {
+        if (empty($identity->getTotpSecret())) {
             return;
         }
         if ($this->getTotp()->getIsVerified()) {

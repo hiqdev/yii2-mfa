@@ -11,6 +11,7 @@
 namespace hiqdev\yii2\mfa\controllers;
 
 use hiqdev\php\confirmator\ServiceInterface;
+use hiqdev\yii2\mfa\base\MfaIdentityInterface;
 use hiqdev\yii2\mfa\exceptions\AuthenticationException;
 use hiqdev\yii2\mfa\filters\ValidateAuthenticationFilter;
 use Yii;
@@ -72,6 +73,7 @@ class AllowedIpsController extends \yii\web\Controller
     public function actionNotAllowedIp($token = null)
     {
         $ip = Yii::$app->request->getUserIP();
+        /** @var MfaIdentityInterface $user */
         $user = $this->module->getHalfUser();
         if ($user && $token === 'send') {
             if ($this->confirmator->mailToken($user, 'add-allowed-ip', ['ip' => $ip])) {
@@ -85,11 +87,11 @@ class AllowedIpsController extends \yii\web\Controller
         if ($user && $token) {
             $token = $this->confirmator->findToken($token);
             if ($token && $token->check([
-                'username' => $user->username,
+                'username' => $user->getUsername(),
                 'action' => 'add-allowed-ip',
                 'ip' => $ip,
             ])) {
-                $user->allowed_ips .= ($user->allowed_ips ? ',' : '') . $ip;
+                $user->addAllowedIp($ip);
                 if ($user->save() && Yii::$app->user->login($user)) {
                     Yii::$app->session->setFlash('success', Yii::t('mfa', 'Now you are allowed to login from {ip}.', ['ip' => $ip]));
 

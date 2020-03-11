@@ -1,10 +1,10 @@
 <?php
 
 /** @var yii\web\View $this */
-/** @var common\models\User $user */
+/** @var \hiqdev\yii2\mfa\base\MfaIdentityInterface $user */
 /** @var string $resetLink */
 ?>
-Hello <?= $user->username ?>,
+Hello <?= $user->getUsername() ?>,
 
 Follow the link below to reset your password:
 

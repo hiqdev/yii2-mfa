@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 
 /** @var yii\web\View $this */
-/** @var yii\web\IdentityInterface $user */
+/** @var hiqdev\yii2\mfa\base\MfaIdentityInterface $user */
 /** @var yii\mail\MessageInterface $message */
 /** @var hiqdev\php\confirmator\Token $token */
 $resetLink = Yii::$app->urlManager->createAbsoluteUrl(['/mfa/allowed-ips/not-allowed-ip', 'token' => (string) $token]);
@@ -17,7 +17,7 @@ $message->renderTextBody(basename(__FILE__, '.php') . '-text', compact('user', '
 
 ?>
 <div class="password-reset">
-    <p><?= Yii::t('mfa', 'Hello, {name}!', ['name' => Html::encode($user->name)]) ?></p>
+    <p><?= Yii::t('mfa', 'Hello, {name}!', ['name' => Html::encode($user->getUsername())]) ?></p>
 
     <p><?= Yii::t('mfa', 'Follow the link below to allow the IP address {ip}:', ['ip' => $ip]) ?></p>
 

@@ -11,6 +11,7 @@
 namespace hiqdev\yii2\mfa\filters;
 
 use Closure;
+use hiqdev\yii2\mfa\base\MfaIdentityInterface;
 use hiqdev\yii2\mfa\exceptions\AuthenticationException;
 use hiqdev\yii2\mfa\exceptions\NotAuthenticatedException;
 use hiqdev\yii2\mfa\Module;
@@ -32,6 +33,7 @@ class ValidateAuthenticationFilter extends ActionFilter
 
     public function beforeAction($action)
     {
+        /** @var MfaIdentityInterface $identity */
         $identity = Yii::$app->user->identity;
 
         if (Yii::$app->user->isGuest || $identity === null) {
@@ -47,7 +49,7 @@ class ValidateAuthenticationFilter extends ActionFilter
         return true;
     }
 
-    public function validateAuthentication(IdentityInterface $identity)
+    public function validateAuthentication(MfaIdentityInterface $identity)
     {
         /** @var Module $module */
         $module = Yii::$app->getModule('mfa');
