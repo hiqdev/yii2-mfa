@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace hiqdev\yii2\mfa\base;
 
-
+use Yii;
 use yii\base\BaseObject;
 
 class RecoveryCodeCollection extends BaseObject
@@ -17,6 +17,11 @@ class RecoveryCodeCollection extends BaseObject
     protected $blockLength = 3;
 
     protected $blockSeparator = '-';
+
+    public function getCodes(): array
+    {
+        return $this->codes;
+    }
 
     public function setCount(int $count): self
     {
@@ -66,14 +71,30 @@ class RecoveryCodeCollection extends BaseObject
         return $this->blockSeparator;
     }
 
-    public function generate(): array
+    public function generate(): self
     {
         $this->reset();
         foreach (range(1, $this->getCount()) as $counter) {
             $this->codes[] = $this->generateCode();
         }
 
-        return $this->codes;
+        return $this;
+    }
+
+    public function save(): bool
+    {
+        $userId = Yii::$app->user->identity->id;
+        Recovery::deleteAll(['user_id' => $userId]);
+
+        $errors = [];
+        foreach ($this->getCodes() as $code){
+            $recovery = new Recovery();
+            if (!$recovery->setUser($userId)->setCode($code)->save()){
+                $errors[] = $recovery->getErrors();
+            }
+        }
+
+        return empty($errors);
     }
 
     private function generateCode(): string

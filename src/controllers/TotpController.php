@@ -11,6 +11,8 @@
 namespace hiqdev\yii2\mfa\controllers;
 
 use hiqdev\yii2\mfa\base\MfaIdentityInterface;
+use hiqdev\yii2\mfa\base\Recovery;
+use hiqdev\yii2\mfa\base\RecoveryCodeCollection;
 use hiqdev\yii2\mfa\forms\InputForm;
 use Yii;
 use yii\filters\AccessControl;
@@ -68,6 +70,14 @@ class TotpController extends \yii\web\Controller
                 $user->setTotpSecret($secret);
                 $this->module->getTotp()->setIsVerified(true);
                 if ($user->save() && Yii::$app->user->login($user)) {
+                    $recovery = new RecoveryCodeCollection();
+                    if (!$recovery->generate()->save()){
+                        Yii::$app->session->setFlash('error',
+                                                     Yii::t(
+                                                         'mfa',
+                                                         'Sorry, we have failed to generate your recovery codes. Please try again later.'
+                                                     ));
+                    }
                     Yii::$app->session->setFlash('success', Yii::t('mfa', 'Two-factor authentication successfully enabled.'));
 
                     return empty($back) ? $this->goBack() : $this->deferredRedirect($back);
