@@ -76,7 +76,8 @@ class TotpController extends \yii\web\Controller
                 $this->module->getTotp()->setIsVerified(true);
                 if ($user->save() && Yii::$app->user->login($user)) {
                     $recovery = new RecoveryCodeCollection();
-                    if (!$recovery->generate()->save()) {
+                    $codes = $recovery->generate();
+                    if (!$codes->save()) {
                         Yii::$app->session->setFlash(
                             'error',
                             Yii::t(
@@ -84,6 +85,8 @@ class TotpController extends \yii\web\Controller
                                 'Sorry, we have failed to generate your recovery codes. Please try again later.'
                             )
                         );
+                    } else {
+                        return $this->actionCodes($codes->getCodes(), $back);
                     }
                     Yii::$app->session->setFlash(
                         'success',
@@ -113,6 +116,20 @@ class TotpController extends \yii\web\Controller
         $qrcode = $this->module->getTotp()->getQRCodeImageAsDataUri($user->getUsername(), $secret);
 
         return $this->render('enable', compact('model', 'secret', 'qrcode'));
+    }
+
+    public function actionCodes(array $codes, $back = null)
+    {
+        if (Yii::$app->request->post('mfa-codes-saved')) {
+            Yii::$app->session->setFlash(
+                'success',
+                Yii::t('mfa', 'Two-factor authentication successfully enabled.')
+            );
+
+            return empty($back) ? $this->goBack() : $this->deferredRedirect($back);
+        }
+
+        return $this->render('codes', compact('codes'));
     }
 
     public function actionDisable($back = null)
