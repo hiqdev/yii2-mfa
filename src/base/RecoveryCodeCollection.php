@@ -84,7 +84,7 @@ class RecoveryCodeCollection extends BaseObject
     public function save(): bool
     {
         $userId = Yii::$app->user->identity->id;
-        Recovery::deleteAll(['user_id' => $userId]);
+        $this->remove();
 
         $errors = [];
         foreach ($this->getCodes() as $code){
@@ -95,6 +95,12 @@ class RecoveryCodeCollection extends BaseObject
         }
 
         return empty($errors);
+    }
+
+    public function remove(): int {
+        $userId = Yii::$app->user->identity->id;
+
+        return Recovery::deleteAll(['user_id' => $userId]);
     }
 
     private function generateCode(): string

@@ -23,10 +23,24 @@ class Recovery extends ActiveRecord
         ];
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function attributeLabels()
+    {
+        return [
+            'code' => Yii::t('mfa', 'Recovery code'),
+        ];
+    }
+
     public function setUser(int $id): self {
         $this->user_id = $id;
 
         return $this;
+    }
+
+    public function getUser(): int {
+        return $this->user_id;
     }
 
     public function setCode(string $code): self {
@@ -35,11 +49,39 @@ class Recovery extends ActiveRecord
         return $this;
     }
 
+    public function getCode(): string {
+        return $this->code;
+    }
+
+    private function setId(int $id): self {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    private function getId(): int {
+        return $this->id;
+    }
+
     public function save($runValidation = true, $attributeNames = null): bool
     {
         $this->code = $this->hashCode($this->code);
 
         return parent::save($runValidation, $attributeNames);
+    }
+
+    public function verifyCode(): bool
+    {
+        $recoveryCodes = self::findAll(['user_id' => $this->getUser()]);
+
+        foreach ($recoveryCodes ?? [] as $recoveryCode){
+            if (Yii::$app->getSecurity()->validatePassword($this->getCode(), $recoveryCode->getCode())){
+                $recoveryCode->delete();
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private function hashCode(string $code): string
