@@ -53,16 +53,6 @@ class Recovery extends ActiveRecord
         return $this->code;
     }
 
-    private function setId(int $id): self {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    private function getId(): int {
-        return $this->id;
-    }
-
     public function save($runValidation = true, $attributeNames = null): bool
     {
         $this->code = $this->hashCode($this->code);
