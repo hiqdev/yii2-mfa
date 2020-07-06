@@ -8,26 +8,24 @@ use yii\base\BaseObject;
 
 class RecoveryCodeCollection extends BaseObject
 {
-    protected array $codes = [];
+    protected $codes = [];
 
-    protected int $count = 10;
+    protected $count = 10;
 
-    protected int $blocks = 4;
+    protected $blocks = 4;
 
-    protected int $blockLength = 3;
+    protected $blockLength = 3;
 
-    protected string $blockSeparator = '-';
+    protected $blockSeparator = '-';
 
     public function getCodes(): array
     {
         return $this->codes;
     }
 
-    public function setCount(int $count): self
+    public function setCount(int $count): void
     {
         $this->count = $count;
-
-        return $this;
     }
 
     public function getCount(): int
@@ -35,11 +33,9 @@ class RecoveryCodeCollection extends BaseObject
         return $this->count;
     }
 
-    public function setBlocks(int $blocks): self
+    public function setBlocks(int $blocks): void
     {
         $this->blocks = $blocks;
-
-        return $this;
     }
 
     public function getBlocks(): int
@@ -47,11 +43,9 @@ class RecoveryCodeCollection extends BaseObject
         return $this->blocks;
     }
 
-    public function setBlockLength(int $length): self
+    public function setBlockLength(int $length): void
     {
         $this->blockLength = $length;
-
-        return $this;
     }
 
     public function getBlockLength(): int
@@ -59,11 +53,9 @@ class RecoveryCodeCollection extends BaseObject
         return $this->blockLength;
     }
 
-    public function setBlockSeparator(string $separator): self
+    public function setBlockSeparator(string $separator): void
     {
         $this->blockSeparator = $separator;
-
-        return $this;
     }
 
     public function getBlockSeparator(): string

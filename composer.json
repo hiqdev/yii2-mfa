@@ -52,7 +52,7 @@
     "require-dev": {
         "hiqdev/hidev-php": "dev-master",
         "hiqdev/hidev-hiqdev": "dev-master",
-        "phpunit/phpunit": "^9.2"
+        "phpunit/phpunit": "^6.5"
     },
     "autoload": {
         "psr-4": {

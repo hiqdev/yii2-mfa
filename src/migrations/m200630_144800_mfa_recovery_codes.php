@@ -19,7 +19,7 @@ class m200630_144800_mfa_recovery_codes extends Migration
                 'user_id' => $this->integer(11)->notNull(),
                 'code' => $this->string(255),
             ],
-            'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB'
+            'CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE=InnoDB'
         );
 
         return true;

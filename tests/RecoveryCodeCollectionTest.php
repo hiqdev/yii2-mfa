@@ -65,7 +65,7 @@ class RecoveryCodeCollectionTest extends TestCase
     public function testGenerate(): void
     {
         // number of generated codes is correct?
-        $codes = $this->recovery->generate();
+        $codes = $this->recovery->generate()->getCodes();
         $this->assertEquals($this->recovery->getCount(), count($codes));
 
         // number of code blocks is correct?
