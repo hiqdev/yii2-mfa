@@ -23,7 +23,7 @@ class RecoveryCodeCollection extends BaseObject
         return $this->codes;
     }
 
-    public function setCount(int $count)
+    public function setCount(int $count): void
     {
         $this->count = $count;
     }
@@ -33,7 +33,7 @@ class RecoveryCodeCollection extends BaseObject
         return $this->count;
     }
 
-    public function setBlocks(int $blocks)
+    public function setBlocks(int $blocks): void
     {
         $this->blocks = $blocks;
     }
@@ -43,7 +43,7 @@ class RecoveryCodeCollection extends BaseObject
         return $this->blocks;
     }
 
-    public function setBlockLength(int $length)
+    public function setBlockLength(int $length): void
     {
         $this->blockLength = $length;
     }
@@ -53,7 +53,7 @@ class RecoveryCodeCollection extends BaseObject
         return $this->blockLength;
     }
 
-    public function setBlockSeparator(string $separator)
+    public function setBlockSeparator(string $separator): void
     {
         $this->blockSeparator = $separator;
     }
