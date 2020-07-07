@@ -8,15 +8,15 @@ use yii\base\BaseObject;
 
 class RecoveryCodeCollection extends BaseObject
 {
-    protected $codes = [];
+    protected array $codes = [];
 
-    protected $count = 10;
+    protected int $count = 10;
 
-    protected $blocks = 4;
+    protected int $blocks = 4;
 
-    protected $blockLength = 3;
+    protected int $blockLength = 3;
 
-    protected $blockSeparator = '-';
+    protected string $blockSeparator = '-';
 
     public function getCodes(): array
     {
