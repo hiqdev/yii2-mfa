@@ -14,7 +14,7 @@ return [
             'translations' => [
                 'mfa' => [
                     'class' => \yii\i18n\PhpMessageSource::class,
-                    'basePath' => '@hiqdev/yii2/mfa/messages',
+                    'basePath' => dirname(__DIR__) . '/src/messages',
                 ],
             ],
         ],
@@ -23,7 +23,7 @@ return [
         ],
         'themeManager' => [
             'pathMap' => [
-                '$themedViewPaths' => ['@hiqdev/yii2/mfa/views'],
+                '$themedViewPaths' => [dirname(__DIR__) . '/src/views'],
             ],
         ],
     ],
