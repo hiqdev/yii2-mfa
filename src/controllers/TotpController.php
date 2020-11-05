@@ -223,7 +223,9 @@ class TotpController extends \yii\web\Controller
             Yii::$app->user->login($user);
 
             return $this->goBack();
-        } else {
+        }
+        
+        if (Yii::$app->request->post()) {
             $model->addError(
                 'code',
                 Yii::t('mfa', 'Wrong recovery code. Please try again.')
