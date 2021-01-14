@@ -16,9 +16,7 @@ use hiqdev\yii2\mfa\exceptions\IpNotAllowedException;
 use hiqdev\yii2\mfa\exceptions\TotpVerificationFailedException;
 use Yii;
 use yii\di\Instance;
-use yii\helpers\StringHelper;
 use yii\validators\IpValidator;
-use yii\web\IdentityInterface;
 
 /**
  * Multi-factor authentication module.
