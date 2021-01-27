@@ -16,9 +16,7 @@ use hiqdev\yii2\mfa\exceptions\IpNotAllowedException;
 use hiqdev\yii2\mfa\exceptions\TotpVerificationFailedException;
 use Yii;
 use yii\di\Instance;
-use yii\helpers\StringHelper;
 use yii\validators\IpValidator;
-use yii\web\IdentityInterface;
 
 /**
  * Multi-factor authentication module.
@@ -67,13 +65,12 @@ class Module extends \yii\base\Module
         $this->sessionSet('totp-tmp-secret', $value->getTotpSecret());
     }
 
-    public function getHalfUser(): MfaIdentityInterface
+    public function getHalfUser(): ?MfaIdentityInterface
     {
         $id = $this->sessionGet('half-user-id');
-        /** @var MfaIdentityInterface $identity */
-        $identity = Yii::$app->user->identityClass;
+        $class = Yii::$app->user->identityClass;
 
-        return $identity::findIdentity($id);
+        return $class::findIdentity($id);
     }
 
     public function removeHalfUser()
