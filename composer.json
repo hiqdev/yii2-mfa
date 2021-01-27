@@ -46,11 +46,12 @@
         }
     ],
     "require": {
-        "php": "^7.2",
+        "php": "^7.2|^8.0",
         "robthree/twofactorauth": "^1.5.1"
     },
     "require-dev": {
-        "phpunit/phpunit": "^6.5"
+        "hiqdev/hidev-php": "dev-master",
+        "hiqdev/hidev-hiqdev": "dev-master"
     },
     "autoload": {
         "psr-4": {
