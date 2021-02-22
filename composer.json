@@ -46,6 +46,7 @@
         }
     ],
     "require": {
+        "php": "^7.2|^8.0",
         "robthree/twofactorauth": "^1.5.1"
     },
     "require-dev": {

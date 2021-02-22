@@ -11,6 +11,8 @@
 namespace hiqdev\yii2\mfa\controllers;
 
 use hiqdev\yii2\mfa\base\MfaIdentityInterface;
+use hiqdev\yii2\mfa\base\Recovery;
+use hiqdev\yii2\mfa\base\RecoveryCodeCollection;
 use hiqdev\yii2\mfa\forms\InputForm;
 use Yii;
 use yii\filters\AccessControl;
@@ -23,26 +25,29 @@ class TotpController extends \yii\web\Controller
 {
     public function behaviors()
     {
-        return array_merge(parent::behaviors(), [
-            'access' => [
-                'class' => AccessControl::class,
-                'denyCallback' => [$this, 'denyCallback'],
-                'rules' => [
-                    // ? - guest
-                    [
-                        'actions' => ['check'],
-                        'roles' => ['?'],
-                        'allow' => true,
-                    ],
-                    // @ - authenticated
-                    [
-                        'actions' => ['enable', 'disable', 'toggle'],
-                        'roles' => ['@'],
-                        'allow' => true,
+        return array_merge(
+            parent::behaviors(),
+            [
+                'access' => [
+                    'class' => AccessControl::class,
+                    'denyCallback' => [$this, 'denyCallback'],
+                    'rules' => [
+                        // ? - guest
+                        [
+                            'actions' => ['check'],
+                            'roles' => ['?'],
+                            'allow' => true,
+                        ],
+                        // @ - authenticated
+                        [
+                            'actions' => ['enable', 'disable', 'toggle'],
+                            'roles' => ['@'],
+                            'allow' => true,
+                        ],
                     ],
                 ],
-            ],
-        ]);
+            ]
+        );
     }
 
     public function denyCallback()
@@ -55,7 +60,10 @@ class TotpController extends \yii\web\Controller
         /** @var MfaIdentityInterface $user */
         $user = Yii::$app->user->identity;
         if ($user->getTotpSecret()) {
-            Yii::$app->session->setFlash('error', Yii::t('mfa', 'Two-factor authentication is already enabled. Disable first.'));
+            Yii::$app->session->setFlash(
+                'error',
+                Yii::t('mfa', 'Two-factor authentication is already enabled. Disable first.')
+            );
 
             return empty($back) ? $this->goHome() : $this->deferredRedirect($back);
         }
@@ -68,22 +76,61 @@ class TotpController extends \yii\web\Controller
                 $user->setTotpSecret($secret);
                 $this->module->getTotp()->setIsVerified(true);
                 if ($user->save() && Yii::$app->user->login($user)) {
-                    Yii::$app->session->setFlash('success', Yii::t('mfa', 'Two-factor authentication successfully enabled.'));
+                    $recovery = new RecoveryCodeCollection();
+                    $codes = $recovery->generate();
+                    if (!$codes->save()) {
+                        Yii::$app->session->setFlash(
+                            'error',
+                            Yii::t(
+                                'mfa',
+                                'Sorry, we have failed to generate your recovery codes. Please try again later.'
+                            )
+                        );
+                    } else {
+                        return $this->actionCodes($codes->getCodes(), $back);
+                    }
+                    Yii::$app->session->setFlash(
+                        'success',
+                        Yii::t('mfa', 'Two-factor authentication successfully enabled.')
+                    );
 
                     return empty($back) ? $this->goBack() : $this->deferredRedirect($back);
                 } else {
-                    Yii::$app->session->setFlash('error', Yii::t('mfa', 'Sorry, we have failed to enable two-factor authentication.'));
+                    Yii::$app->session->setFlash(
+                        'error',
+                        Yii::t(
+                            'mfa',
+                            'Sorry, we have failed to enable two-factor authentication.'
+                        )
+                    );
 
                     return empty($back) ? $this->goHome() : $this->deferredRedirect($back);
                 }
             } else {
-                $model->addError('code', Yii::t('mfa', 'Wrong verification code. Please verify your secret and try again.'));
+                $model->addError(
+                    'code',
+                    Yii::t('mfa', 'Wrong verification code. Please verify your secret and try again.')
+                );
             }
         }
 
         $qrcode = $this->module->getTotp()->getQRCodeImageAsDataUri($user->getUsername(), $secret);
 
         return $this->render('enable', compact('model', 'secret', 'qrcode'));
+    }
+
+    public function actionCodes(array $codes, $back = null)
+    {
+        if (Yii::$app->request->post('mfa-codes-saved')) {
+            Yii::$app->session->setFlash(
+                'success',
+                Yii::t('mfa', 'Two-factor authentication successfully enabled.')
+            );
+
+            return empty($back) ? $this->goBack() : $this->deferredRedirect($back);
+        }
+
+        return $this->render('codes', compact('codes'));
     }
 
     public function actionDisable($back = null)
@@ -98,14 +145,21 @@ class TotpController extends \yii\web\Controller
                 $this->module->getTotp()->removeSecret();
                 $user->setTotpSecret('');
                 if ($user->save()) {
-                    Yii::$app->session->setFlash('success', Yii::t('mfa', 'Two-factor authentication successfully disabled.'));
+                    Yii::$app->session->setFlash(
+                        'success',
+                        Yii::t('mfa', 'Two-factor authentication successfully disabled.')
+                    );
                 }
 
                 return empty($back) ? $this->goBack() : $this->deferredRedirect($back);
             } else {
-                $model->addError('code', Yii::t('mfa', 'Wrong verification code. Please verify your secret and try again.'));
+                $model->addError(
+                    'code',
+                    Yii::t('mfa', 'Wrong verification code. Please verify your secret and try again.')
+                );
             }
         }
+
         return $this->render('disable', compact('model'));
     }
 
@@ -122,8 +176,11 @@ class TotpController extends \yii\web\Controller
         return empty($user->getTotpSecret()) ? $this->actionEnable($back) : $this->actionDisable($back);
     }
 
-    public function actionCheck()
+    public function actionCheck(bool $useRecoveryCode = false)
     {
+        if ($useRecoveryCode){
+            return $this->actionRecover();
+        }
         /** @var MfaIdentityInterface $user */
         $user = $this->module->getHalfUser();
         $model = new InputForm();
@@ -136,15 +193,53 @@ class TotpController extends \yii\web\Controller
 
                 return $this->goBack();
             } else {
-                $model->addError('code', Yii::t('mfa', 'Wrong verification code. Please verify your secret and try again.'));
+                $model->addError(
+                    'code',
+                    Yii::t('mfa', 'Wrong verification code. Please verify your secret and try again.')
+                );
             }
         }
 
-        return $this->render('check', [
-            'model' => $model,
-            'issuer' => $this->module->getTotp()->issuer,
-            'username' => $user->getUsername(),
-        ]);
+        return $this->render(
+            'check',
+            [
+                'model' => $model,
+                'issuer' => $this->module->getTotp()->issuer,
+                'username' => $user->getUsername(),
+            ]
+        );
+    }
+
+
+    public function actionRecover($back = null)
+    {
+        /** @var MfaIdentityInterface $user */
+        $user = $this->module->getHalfUser();
+        $model = new Recovery();
+        $model->setUser($user->getId());
+
+        if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->verifyCode()) {
+            $this->module->getTotp()->setIsVerified(true);
+            Yii::$app->user->login($user);
+
+            return $this->goBack();
+        }
+        
+        if (Yii::$app->request->post()) {
+            $model->addError(
+                'code',
+                Yii::t('mfa', 'Wrong recovery code. Please try again.')
+            );
+        }
+
+        return $this->render(
+            'recover',
+            [
+                'model' => $model,
+                'issuer' => $this->module->getTotp()->issuer,
+                'username' => $user->getUsername(),
+            ]
+        );
     }
 
     /**
