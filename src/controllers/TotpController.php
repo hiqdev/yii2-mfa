@@ -11,9 +11,13 @@
 namespace hiqdev\yii2\mfa\controllers;
 
 use hiqdev\yii2\mfa\base\MfaIdentityInterface;
+use hiqdev\yii2\mfa\behaviors\OauthLoginBehavior;
 use hiqdev\yii2\mfa\forms\InputForm;
 use Yii;
 use yii\filters\AccessControl;
+use yii\filters\ContentNegotiator;
+use yii\filters\VerbFilter;
+use yii\web\Response;
 
 /**
  * TOTP controller.
@@ -21,6 +25,8 @@ use yii\filters\AccessControl;
  */
 class TotpController extends \yii\web\Controller
 {
+    public $enableCsrfValidation = false;
+
     public function behaviors()
     {
         return array_merge(parent::behaviors(), [
@@ -40,6 +46,29 @@ class TotpController extends \yii\web\Controller
                         'roles' => ['@'],
                         'allow' => true,
                     ],
+                    [
+                        'actions' => ['api-temporary-secret', 'api-disable', 'api-enable'/*, 'code' */],
+                        'allow' => true,
+                    ]
+                ],
+            ],
+            'verbFilter' => [
+                'class' => VerbFilter::class,
+                'actions' => [
+                    'api-temporary-secret' => ['POST'],
+                    'api-enable' => ['POST'],
+                    'api-disable' => ['POST']
+                ],
+            ],
+            'filterApi' => [
+                'class' => OauthLoginBehavior::class,
+                'only' => ['api-temporary-secret', 'api-disable', 'api-enable'],
+            ],
+            'contentNegotiator' => [
+                'class' => ContentNegotiator::class,
+                'only' => ['api-temporary-secret', 'api-disable', 'api-enable'],
+                'formats' => [
+                    'application/json' => Response::FORMAT_JSON,
                 ],
             ],
         ]);
@@ -159,4 +188,60 @@ class TotpController extends \yii\web\Controller
 
         return parent::goBack($defaultUrl);
     }
+
+    public function actionApiEnable()
+    {
+        /** @var MfaIdentityInterface $identity */
+        $identity = \Yii::$app->user->identity;
+        $secret = $identity->getTotpSecret();
+        if (!empty($secret)) {
+            return ['_error' => 'mfa already enabled' . $secret];
+        }
+
+        if (!$this->module->getTotp()->verifyCode($identity->getTemporarySecret(), \Yii::$app->request->post()['code'] ?? '')) {
+            return ['_error' => 'invalid totp code'];
+        }
+
+        $identity->setTotpSecret($identity->getTemporarySecret());
+        $identity->setTemporarySecret(null);
+        $identity->save();
+
+        return ['id' => $identity->getId()];
+    }
+
+    public function actionApiDisable()
+    {
+        /** @var MfaIdentityInterface $identity */
+        $identity = \Yii::$app->user->identity;
+        $secret = $identity->getTotpSecret();
+        if (empty($secret)) {
+            return ['_error' => 'mfa disabled, enable first'];
+        }
+
+        if (!$this->module->getTotp()->verifyCode($secret, \Yii::$app->request->post()['code'] ?? '')) {
+            return ['_error' => 'wrong code'];
+        }
+
+        $identity->setTotpSecret('');
+        $identity->save();
+
+        return ['id' => $identity->getId()];
+    }
+
+    public function actionApiTemporarySecret()
+    {
+        /** @var MfaIdentityInterface $identity */
+        $identity = \Yii::$app->user->identity;
+        $secret = $this->module->getTotp()->getSecret();
+        $identity->setTemporarySecret($secret);
+        /** TODO: think about lib usage */
+        $identity->save();
+
+        return ['secret' => $secret];
+    }
+
+//    public function actionCode($secret)
+//    {
+//        return json_encode(['code' => $this->module->getTotp()->getCode($secret)]);
+//    }
 }

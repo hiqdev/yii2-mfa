@@ -46,7 +46,8 @@
         }
     ],
     "require": {
-        "robthree/twofactorauth": "^1.5.1"
+        "robthree/twofactorauth": "^1.5.1",
+        "bshaffer/oauth2-server-php": "~1.7"
     },
     "require-dev": {
         "hiqdev/hidev-php": "dev-master",

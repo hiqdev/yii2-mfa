@@ -52,4 +52,8 @@ interface MfaIdentityInterface extends IdentityInterface
      * @return $this
      */
     public function addAllowedIp(string $allowedIp): self;
+
+    public function getTemporarySecret(): ?string;
+
+    public function setTemporarySecret(?string $secret): self;
 }
