@@ -47,7 +47,7 @@ class TotpController extends \yii\web\Controller
                         'allow' => true,
                     ],
                     [
-                        'actions' => ['api-temporary-secret', 'api-disable', 'api-enable'/*, 'code' */],
+                        'actions' => ['api-temporary-secret', 'api-disable', 'api-enable'],
                         'allow' => true,
                     ]
                 ],
@@ -239,9 +239,4 @@ class TotpController extends \yii\web\Controller
 
         return ['secret' => $secret];
     }
-
-//    public function actionCode($secret)
-//    {
-//        return json_encode(['code' => $this->module->getTotp()->getCode($secret)]);
-//    }
 }
