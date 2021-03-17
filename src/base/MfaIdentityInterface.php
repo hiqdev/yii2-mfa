@@ -15,14 +15,14 @@ interface MfaIdentityInterface extends IdentityInterface
     /**
      * @inheritDoc
      *
-     * @return MfaIdentityInterface
+     * @return MfaIdentityInterface|null
      */
     public static function findIdentity($id);
 
     /**
      * @inheritDoc
      *
-     * @return MfaIdentityInterface
+     * @return MfaIdentityInterface|null
      */
     public static function findIdentityByAccessToken($token, $type = null);
 
