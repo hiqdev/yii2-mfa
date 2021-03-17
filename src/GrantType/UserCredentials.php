@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace hiqdev\yii2\mfa\GrandType;
+namespace hiqdev\yii2\mfa\GrantType;
 
 use OAuth2\RequestInterface;
 use OAuth2\ResponseInterface;
