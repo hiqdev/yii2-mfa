@@ -40,7 +40,7 @@ class OauthLoginBehavior extends ActionFilter
         $identity = $this->user->identityClass::findIdentityByAccessToken($token);
         if ($identity === null) {
             $this->response->setStatusCode(400);
-            $this->response->data['_error'] = 'invalid token';
+            $this->response->data = ['_error' => 'invalid_token'];
             return false;
         }
 
