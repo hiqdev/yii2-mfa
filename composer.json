@@ -46,12 +46,14 @@
         }
     ],
     "require": {
-        "robthree/twofactorauth": "^1.5.1",
-        "bshaffer/oauth2-server-php": "~1.7"
+        "robthree/twofactorauth": "^1.5.1"
     },
     "require-dev": {
         "hiqdev/hidev-php": "dev-master",
         "hiqdev/hidev-hiqdev": "dev-master"
+    },
+    "suggest": {
+        "bshaffer/oauth2-server-php": "Require '~1.7' version to use TOTP with OAuth2 protocol"
     },
     "autoload": {
         "psr-4": {

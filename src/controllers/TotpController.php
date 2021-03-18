@@ -10,6 +10,7 @@
 
 namespace hiqdev\yii2\mfa\controllers;
 
+use hiqdev\yii2\mfa\base\ApiMfaIdentityInterface;
 use hiqdev\yii2\mfa\base\MfaIdentityInterface;
 use hiqdev\yii2\mfa\behaviors\OauthLoginBehavior;
 use hiqdev\yii2\mfa\forms\InputForm;
@@ -30,6 +31,10 @@ class TotpController extends \yii\web\Controller
     public function behaviors()
     {
         return array_merge(parent::behaviors(), [
+            'filterApi' => [
+                'class' => OauthLoginBehavior::class,
+                'only' => ['api-temporary-secret', 'api-disable', 'api-enable'],
+            ],
             'access' => [
                 'class' => AccessControl::class,
                 'denyCallback' => [$this, 'denyCallback'],
@@ -42,14 +47,10 @@ class TotpController extends \yii\web\Controller
                     ],
                     // @ - authenticated
                     [
-                        'actions' => ['enable', 'disable', 'toggle'],
+                        'actions' => ['enable', 'disable', 'toggle', 'api-temporary-secret', 'api-disable', 'api-enable'],
                         'roles' => ['@'],
                         'allow' => true,
                     ],
-                    [
-                        'actions' => ['api-temporary-secret', 'api-disable', 'api-enable'],
-                        'allow' => true,
-                    ]
                 ],
             ],
             'verbFilter' => [
@@ -57,12 +58,8 @@ class TotpController extends \yii\web\Controller
                 'actions' => [
                     'api-temporary-secret' => ['POST'],
                     'api-enable' => ['POST'],
-                    'api-disable' => ['POST']
+                    'api-disable' => ['POST'],
                 ],
-            ],
-            'filterApi' => [
-                'class' => OauthLoginBehavior::class,
-                'only' => ['api-temporary-secret', 'api-disable', 'api-enable'],
             ],
             'contentNegotiator' => [
                 'class' => ContentNegotiator::class,
@@ -191,7 +188,7 @@ class TotpController extends \yii\web\Controller
 
     public function actionApiEnable()
     {
-        /** @var MfaIdentityInterface $identity */
+        /** @var ApiMfaIdentityInterface $identity */
         $identity = \Yii::$app->user->identity;
         $secret = $identity->getTotpSecret();
         if (!empty($secret)) {
@@ -211,7 +208,7 @@ class TotpController extends \yii\web\Controller
 
     public function actionApiDisable()
     {
-        /** @var MfaIdentityInterface $identity */
+        /** @var ApiMfaIdentityInterface $identity */
         $identity = \Yii::$app->user->identity;
         $secret = $identity->getTotpSecret();
         if (empty($secret)) {
@@ -219,7 +216,7 @@ class TotpController extends \yii\web\Controller
         }
 
         if (!$this->module->getTotp()->verifyCode($secret, \Yii::$app->request->post()['code'] ?? '')) {
-            return ['_error' => 'wrong code'];
+            return ['_error' => 'invalid totp code'];
         }
 
         $identity->setTotpSecret('');
@@ -230,7 +227,7 @@ class TotpController extends \yii\web\Controller
 
     public function actionApiTemporarySecret()
     {
-        /** @var MfaIdentityInterface $identity */
+        /** @var ApiMfaIdentityInterface $identity */
         $identity = \Yii::$app->user->identity;
         $secret = $this->module->getTotp()->getSecret();
         $identity->setTemporarySecret($secret);

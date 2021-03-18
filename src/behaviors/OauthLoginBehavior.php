@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace hiqdev\yii2\mfa\behaviors;
 
+use hiqdev\yii2\mfa\Module;
 use yii\base\ActionFilter;
 use yii\web\Request;
 use yii\web\Response;
@@ -15,6 +16,7 @@ class OauthLoginBehavior extends ActionFilter
     private User $user;
     private Request $request;
     private Response $response;
+    private Module $module;
 
     public function __construct(
         User $user,
@@ -27,6 +29,7 @@ class OauthLoginBehavior extends ActionFilter
         $this->user = $user;
         $this->request = $request;
         $this->response = $response;
+        $this->module = \Yii::$app->getModule('mfa');;
     }
 
     public function beforeAction($action)
@@ -44,6 +47,7 @@ class OauthLoginBehavior extends ActionFilter
             return false;
         }
 
+        $this->module->getTotp()->setIsVerified(true);
         $this->user->login($identity);
 
         return true;
