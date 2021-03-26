@@ -39,7 +39,7 @@ class OauthLoginBehavior extends ActionFilter
             return true;
         }
 
-        $token = $this->request->post()['access_token'] ?? '';
+        $token = $this->request->post('access_token', '');
         $identity = $this->user->identityClass::findIdentityByAccessToken($token);
         if ($identity === null) {
             $this->response->setStatusCode(400);
