@@ -19,5 +19,5 @@ interface ApiMfaIdentityInterface extends TotpSecretStorageInterface, MfaSaveInt
 {
     public function getTemporarySecret(): ?string;
 
-    public function setTemporarySecret(?string $secret);
+    public function setTemporarySecret(?string $secret): void;
 }
