@@ -195,7 +195,7 @@ class TotpController extends \yii\web\Controller
             return ['_error' => 'mfa already enabled' . $secret];
         }
 
-        if (!$this->module->getTotp()->verifyCode($identity->getTemporarySecret(), \Yii::$app->request->post()['code'] ?? '')) {
+        if (!$this->module->getTotp()->verifyCode($identity->getTemporarySecret(), $this->request->post('code', ''))) {
             return ['_error' => 'invalid totp code'];
         }
 
@@ -231,7 +231,6 @@ class TotpController extends \yii\web\Controller
         $identity = \Yii::$app->user->identity;
         $secret = $this->module->getTotp()->getSecret();
         $identity->setTemporarySecret($secret);
-        /** TODO: think about lib usage */
         $identity->save();
 
         return ['secret' => $secret];

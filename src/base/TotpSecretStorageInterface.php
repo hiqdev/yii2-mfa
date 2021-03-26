@@ -13,5 +13,5 @@ interface TotpSecretStorageInterface
     /**
      * @param string $secret
      */
-    public function setTotpSecret(string $secret);
+    public function setTotpSecret(string $secret): void;
 }

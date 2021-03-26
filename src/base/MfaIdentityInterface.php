@@ -39,5 +39,5 @@ interface MfaIdentityInterface extends IdentityInterface, TotpSecretStorageInter
     /**
      * @param string $allowedIp
      */
-    public function addAllowedIp(string $allowedIp);
+    public function addAllowedIp(string $allowedIp): void;
 }

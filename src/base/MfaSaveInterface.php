@@ -5,5 +5,5 @@ namespace hiqdev\yii2\mfa\base;
 
 interface MfaSaveInterface
 {
-    public function save();
+    public function save(): bool;
 }
