@@ -215,7 +215,7 @@ class TotpController extends \yii\web\Controller
             return ['_error' => 'mfa disabled, enable first'];
         }
 
-        if (!$this->module->getTotp()->verifyCode($secret, \Yii::$app->request->post()['code'] ?? '')) {
+        if (!$this->module->getTotp()->verifyCode($secret, $this->request->post('code', ''))) {
             return ['_error' => 'invalid totp code'];
         }
 
