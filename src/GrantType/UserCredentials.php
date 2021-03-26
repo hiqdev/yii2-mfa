@@ -19,7 +19,7 @@ class UserCredentials extends \OAuth2\GrantType\UserCredentials
         $this->totpService = \Yii::createObject(TwoFactorAuth::class);
     }
 
-    public function validateRequest(RequestInterface $request, ResponseInterface $response)
+    public function validateRequest(RequestInterface $request, ResponseInterface $response): bool
     {
         $result = parent::validateRequest($request, $response);
         if (!$result) {
