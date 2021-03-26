@@ -10,19 +10,19 @@ use yii\web\IdentityInterface;
  * Interface MfaIdentityInterface
  * @package hiqdev\yii2\mfa\base
  */
-interface MfaIdentityInterface extends IdentityInterface
+interface MfaIdentityInterface extends IdentityInterface, TotpSecretStorageInterface, MfaSaveInterface
 {
     /**
      * @inheritDoc
      *
-     * @return MfaIdentityInterface
+     * @return MfaIdentityInterface|null
      */
     public static function findIdentity($id);
 
     /**
      * @inheritDoc
      *
-     * @return MfaIdentityInterface
+     * @return MfaIdentityInterface|null
      */
     public static function findIdentityByAccessToken($token, $type = null);
 
@@ -32,24 +32,12 @@ interface MfaIdentityInterface extends IdentityInterface
     public function getUsername(): string;
 
     /**
-     * @return string
-     */
-    public function getTotpSecret(): string;
-
-    /**
      * @return string[]
      */
     public function getAllowedIps(): array;
 
     /**
-     * @param string $secret
-     * @return $this
-     */
-    public function setTotpSecret(string $secret): self;
-
-    /**
      * @param string $allowedIp
-     * @return $this
      */
-    public function addAllowedIp(string $allowedIp): self;
+    public function addAllowedIp(string $allowedIp): void;
 }

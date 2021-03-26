@@ -100,6 +100,35 @@ which will return or set MFA properties. For example:
 IPs and TOTP functions are independent and you can provide just one of properties to have only
 corresponding functionality.
 
+## Usage with OAuth2
+
+Also there is a configuration to provide MFA for OAuth2.
+
+ - Require suggested `"bshaffer/oauth2-server-php": '~1.7'` package
+
+ - Use `hiqdev\yii2\mfa\GrantType\UserCredentials` for configuring `/oauth/token` command via totp code.
+For example:
+
+
+    'modules' => [
+        'oauth2' => [
+            'grantTypes' => [
+                'user_credentials' => [
+                    'class' => \hiqdev\yii2\mfa\GrantType\UserCredentials::class,
+                ],
+            ],
+        ],
+    ]
+
+ - Extend you `Identity` class from `ApiMfaIdentityInterface`.
+
+ - Use actions:
+
+
+    POST /mfa/totp/api-temporary-secret - Proviedes temporary secret to generate QR-code
+    POST /mfa/totp/api-enable - Enables totp
+    POST /mfa/totp/api-disable - Disables totp
+
 ## License
 
 This project is released under the terms of the BSD-3-Clause [license](LICENSE).

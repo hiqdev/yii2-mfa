@@ -52,6 +52,9 @@
         "hiqdev/hidev-php": "dev-master",
         "hiqdev/hidev-hiqdev": "dev-master"
     },
+    "suggest": {
+        "bshaffer/oauth2-server-php": "Require '~1.7' version to use TOTP with OAuth2 protocol"
+    },
     "autoload": {
         "psr-4": {
             "hiqdev\\yii2\\mfa\\": "src"
