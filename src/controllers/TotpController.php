@@ -26,6 +26,8 @@ use yii\web\Response;
  */
 class TotpController extends \yii\web\Controller
 {
+    private const TOTP_BACK_URL = 'totp-back-url';
+
     public $enableCsrfValidation = false;
 
     public function behaviors()
@@ -47,7 +49,7 @@ class TotpController extends \yii\web\Controller
                     ],
                     // @ - authenticated
                     [
-                        'actions' => ['enable', 'disable', 'toggle', 'api-temporary-secret', 'api-disable', 'api-enable'],
+                        'actions' => ['enable', 'disable', 'toggle', 'api-temporary-secret', 'api-disable', 'api-enable', 'back'],
                         'roles' => ['@'],
                         'allow' => true,
                     ],
@@ -135,9 +137,21 @@ class TotpController extends \yii\web\Controller
         return $this->render('disable', compact('model'));
     }
 
+    public function actionBack()
+    {
+        $url = \Yii::$app->getSession()->get(self::TOTP_BACK_URL);
+        if (empty($url)) {
+            return $this->goBack();
+        }
+        \Yii::$app->getSession()->remove(self::TOTP_BACK_URL);
+
+        return $this->redirect($url);
+    }
+
     public function deferredRedirect($url = null)
     {
-        return $this->render('redirect', compact('url'));
+        \Yii::$app->getSession()->set(self::TOTP_BACK_URL, $url);
+        return $this->render('redirect');
     }
 
     public function actionToggle($back = null)
