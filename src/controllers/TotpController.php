@@ -139,18 +139,18 @@ class TotpController extends \yii\web\Controller
 
     public function actionBack()
     {
-        $url = \Yii::$app->getSession()->get(self::TOTP_BACK_URL);
+        $url = Yii::$app->getSession()->get(self::TOTP_BACK_URL);
         if (empty($url)) {
             return $this->goBack();
         }
-        \Yii::$app->getSession()->remove(self::TOTP_BACK_URL);
+        Yii::$app->getSession()->remove(self::TOTP_BACK_URL);
 
         return $this->redirect($url);
     }
 
     public function deferredRedirect($url = null)
     {
-        \Yii::$app->getSession()->set(self::TOTP_BACK_URL, $url);
+        Yii::$app->getSession()->set(self::TOTP_BACK_URL, $url);
         return $this->render('redirect');
     }
 
