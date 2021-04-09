@@ -132,20 +132,22 @@ For example:
 
 ## Back redirection
 
-For any mfa route you can add GET param `?back=https://some.site.com`.
-It will redirect user after success operation to needed site.
-To avoid open redirect vulnerability you need to validate `back` param.
-It should be done with `\hiqdev\yii2\mfa\validator\BackUrlValidatorInterface` which has default realization.
-You have to create our own and reinitialize it with container definition
+For any MFA route, you can add a GET param `?back=https://some.site.com`.
+It will redirect the user after a successful operation to the needed site.
+To avoid open redirect vulnerability, you need to validate the `back` param.
 
+It should be done with `\hiqdev\yii2\mfa\validator\BackUrlValidatorInterface` which has a default implementation.
+You have to create your own and reinitialize it with the container definition:
 
-    config/web.php
+config/web.php:
 
-    'container' => [
-        'singletons' => [
-            \hiqdev\yii2\mfa\validator\BackUrlValidatorInterface::class => \your\own\validator::class,
-        ],
+<pre>
+'container' => [
+   'singletons' => [
+       \hiqdev\yii2\mfa\validator\BackUrlValidatorInterface::class => \your\own\validator::class,
     ],
+],
+</pre>
 
 ## License
 
