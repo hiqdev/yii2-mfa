@@ -14,6 +14,7 @@ use hiqdev\yii2\mfa\base\ApiMfaIdentityInterface;
 use hiqdev\yii2\mfa\base\MfaIdentityInterface;
 use hiqdev\yii2\mfa\behaviors\OauthLoginBehavior;
 use hiqdev\yii2\mfa\forms\InputForm;
+use hiqdev\yii2\mfa\validator\BackUrlValidatorInterface;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\ContentNegotiator;
@@ -150,7 +151,9 @@ class TotpController extends \yii\web\Controller
 
     public function deferredRedirect($url = null)
     {
-        Yii::$app->getSession()->set(self::TOTP_BACK_URL, $url);
+        if (!empty($url) && Yii::createObject(BackUrlValidatorInterface::class)->validate($url)) {
+            Yii::$app->getSession()->set(self::TOTP_BACK_URL, $url);
+        }
         return $this->render('redirect');
     }
 

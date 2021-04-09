@@ -129,6 +129,26 @@ For example:
     POST /mfa/totp/api-enable - Enables totp
     POST /mfa/totp/api-disable - Disables totp
 
+
+## Back redirection
+
+For any MFA route, you can add a GET param `?back=https://some.site.com`.
+It will redirect the user after a successful operation to the needed site.
+To avoid open redirect vulnerability, you need to validate the `back` param.
+
+It should be done with `\hiqdev\yii2\mfa\validator\BackUrlValidatorInterface` which has a default implementation.
+You have to create your own and reinitialize it with the container definition:
+
+config/web.php:
+
+<pre>
+'container' => [
+   'singletons' => [
+       \hiqdev\yii2\mfa\validator\BackUrlValidatorInterface::class => \your\own\validator::class,
+    ],
+],
+</pre>
+
 ## License
 
 This project is released under the terms of the BSD-3-Clause [license](LICENSE).
