@@ -27,6 +27,11 @@ return [
             ],
         ],
     ],
+    'container' => [
+        'singletons' => [
+            \hiqdev\yii2\mfa\validator\BackUrlValidatorInterface::class => \hiqdev\yii2\mfa\validator\BackUrlValidator::class,
+        ],
+    ],
     'modules' => [
         'mfa' => [
             'class' => \hiqdev\yii2\mfa\Module::class,
