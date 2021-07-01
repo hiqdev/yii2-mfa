@@ -46,7 +46,8 @@
         }
     ],
     "require": {
-        "robthree/twofactorauth": "^1.5.1"
+        "robthree/twofactorauth": "^1.5.1",
+        "hiqdev/php-confirmator": "dev-master"
     },
     "require-dev": {
         "hiqdev/hidev-php": "dev-master",
