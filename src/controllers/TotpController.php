@@ -209,7 +209,7 @@ class TotpController extends \yii\web\Controller
         $identity = \Yii::$app->user->identity;
         $secret = $identity->getTotpSecret();
         if (!empty($secret)) {
-            return ['_error' => 'mfa already enabled' . $secret];
+            return ['_error' => 'mfa already enabled'];
         }
 
         if (!$this->module->getTotp()->verifyCode($identity->getTemporarySecret(), $this->request->post('code', ''))) {
