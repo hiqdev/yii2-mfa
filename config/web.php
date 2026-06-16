@@ -38,6 +38,7 @@ return [
             'totp' => [
                 'workerClass' => \RobThree\Auth\TwoFactorAuth::class,
                 'issuer' => !empty($params['organization.name']) ? $params['organization.name'] : 'Yii2 MFA',
+                'qrcodeProvider' => \hiqdev\yii2\mfa\Providers\Qr\QRServerProvider::class,
             ],
         ],
     ],

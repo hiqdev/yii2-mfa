@@ -40,18 +40,21 @@ class Totp extends \yii\base\BaseObject
     {
         if ($this->_worker === null) {
             $class = $this->workerClass;
+            $qrcodeProvider = is_string($this->qrcodeProvider)
+                ? new $this->qrcodeProvider()
+                : $this->qrcodeProvider;
             $this->_worker = new $class(
                 $this->issuer, $this->digits, $this->period, $this->algorithm,
-                $this->qrcodeProvider, $this->rngProvider
+                $qrcodeProvider, $this->rngProvider
             );
         }
 
         return $this->_worker;
     }
 
-    public function __call($name, $args)
+    public function __call($name, $params)
     {
-        return call_user_func_array([$this->getWorker(), $name], $args);
+        return call_user_func_array([$this->getWorker(), $name], $params);
     }
 
     public function removeSecret()
