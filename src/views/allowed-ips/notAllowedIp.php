@@ -14,7 +14,7 @@ $this->title = Yii::t('mfa', 'Not allowed IP');
 </p>
 
 <p align="center">
-    <b><?= Html::a(Yii::t('mfa', 'Add this IP to the list of allowed IPs'), ['token' => 'send']) ?></b>
+    <b><?= Html::a(Yii::t('mfa', 'Add this IP to the list of allowed IPs'), ['not-allowed-ip', 'token' => 'send']) ?></b>
 </p>
 
 <p align="center">
