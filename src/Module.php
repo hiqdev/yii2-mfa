@@ -62,7 +62,10 @@ class Module extends \yii\base\Module
     public function setHalfUser(MfaIdentityInterface $value)
     {
         $this->sessionSet('half-user-id', $value->getId());
-        $this->sessionSet('totp-tmp-secret', $value->getTotpSecret());
+        // older versions stored the user's real TOTP secret here; a temporary one always has an expiry
+        if ($this->sessionGet('totp-tmp-expires') === null) {
+            $this->sessionRemove('totp-tmp-secret');
+        }
     }
 
     public function getHalfUser(): ?MfaIdentityInterface
@@ -76,7 +79,6 @@ class Module extends \yii\base\Module
     public function removeHalfUser()
     {
         $this->sessionRemove('half-user-id');
-        $this->sessionRemove('totp-tmp-secret');
     }
 
     public function validateIps(MfaIdentityInterface $identity)
